@@ -3,3 +3,8 @@ D:\SteamLibrary\steamapps\common\RimWorld\Mods\Rimlingo2\Rimlingo\obj\Debug\Riml
 D:\SteamLibrary\steamapps\common\RimWorld\Mods\Rimlingo2\Assemblies\Rimlingo.dll
 D:\SteamLibrary\steamapps\common\RimWorld\Mods\Rimlingo2\Rimlingo\obj\Debug\Rimlingo.csproj.Up2Date
 D:\SteamLibrary\steamapps\common\RimWorld\Mods\Rimlingo2\Rimlingo\obj\Debug\Rimlingo.dll
+D:\SteamLibrary\steamapps\common\RimWorld\Mods\Rimlingo\Assemblies\Rimlingo.dll
+D:\SteamLibrary\steamapps\common\RimWorld\Mods\Rimlingo\Rimlingo\obj\Debug\Rimlingo.csproj.AssemblyReference.cache
+D:\SteamLibrary\steamapps\common\RimWorld\Mods\Rimlingo\Rimlingo\obj\Debug\Rimlingo.csproj.CoreCompileInputs.cache
+D:\SteamLibrary\steamapps\common\RimWorld\Mods\Rimlingo\Rimlingo\obj\Debug\Rimlingo.csproj.Up2Date
+D:\SteamLibrary\steamapps\common\RimWorld\Mods\Rimlingo\Rimlingo\obj\Debug\Rimlingo.dll

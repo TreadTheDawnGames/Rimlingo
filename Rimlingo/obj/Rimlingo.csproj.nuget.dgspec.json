@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo2\\Rimlingo\\Rimlingo.csproj": {}
+    "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo\\Rimlingo\\Rimlingo.csproj": {}
   },
   "projects": {
-    "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo2\\Rimlingo\\Rimlingo.csproj": {
+    "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo\\Rimlingo\\Rimlingo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo2\\Rimlingo\\Rimlingo.csproj",
+        "projectUniqueName": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo\\Rimlingo\\Rimlingo.csproj",
         "projectName": "Rimlingo",
-        "projectPath": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo2\\Rimlingo\\Rimlingo.csproj",
+        "projectPath": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo\\Rimlingo\\Rimlingo.csproj",
         "packagesPath": "C:\\Users\\optim\\.nuget\\packages\\",
-        "outputPath": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo2\\Rimlingo\\obj\\",
+        "outputPath": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo\\Rimlingo\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "UsingMicrosoftNETSdk": false,
