@@ -7,6 +7,7 @@ namespace Rimlingo
 {
     public static class LanguageUtility
     {
+        // Retrieves the CompPawnLanguages component from a given pawn, which manages language skills.
         public static CompPawnLanguages GetLanguagesComp(Pawn pawn)
         {
             return pawn?.TryGetComp<CompPawnLanguages>();
@@ -23,8 +24,8 @@ namespace Rimlingo
             return GetLanguagesComp(pawn)?.GetLanguageSkill(langDefName) ?? 0f;
         }
 
-
-        public static void AlterLanguageSkill(Pawn pawn, string langDefName, float amount)
+        // Increases the language skill of a pawn for a specific language by a given amount, capped at 100.
+        public static void IncreaseLanguageSkill(Pawn pawn, string langDefName, float amount)
         {
             var comp = GetLanguagesComp(pawn);
             if (comp == null) return;
@@ -36,12 +37,14 @@ namespace Rimlingo
             Log.Message($"[Rimlingo] {pawn.LabelShort} gained {amount:F1} in {langDefName}, now {newVal:F1}.");
         }
 
+        // Retrieves the intelligence level of a pawn, which is used to determine language learning capability.
         public static int GetPawnIntelligence(Pawn pawn)
         {
             var skill = pawn?.skills?.GetSkill(SkillDefOf.Intellectual);
             return skill?.Level ?? 0;
         }
 
+        // Determines the best mutual language between two pawns, prioritizing non-common languages.
         public static string DetermineBestLanguage(Pawn initiator, Pawn recipient)
         {
             var compA = GetLanguagesComp(initiator);
@@ -63,6 +66,7 @@ namespace Rimlingo
             return null;
         }
 
+        // Gives a thought to a pawn about another pawn, using a specified ThoughtDef.
         public static void GiveThought(Pawn p1, Pawn p2, ThoughtDef def)
         {
             p1?.needs?.mood?.thoughts?.memories?.TryGainMemory(def, p2);
