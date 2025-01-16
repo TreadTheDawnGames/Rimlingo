@@ -47,7 +47,7 @@ namespace Rimlingo
                     if (intellect > 0)
                     {
                         float gain = intellect * 2f;
-                        LanguageUtility.IncreaseLanguageSkill(reader, languageDef, gain);
+                        LanguageUtility.AlterLanguageSkill(reader, languageDef, gain);
                         Log.Message($"[Rimlingo] {reader.LabelShort} improved {languageDef} by {gain} via reading {book.def.label}!");
                     }
                 }

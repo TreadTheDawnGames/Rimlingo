@@ -9,8 +9,8 @@ namespace Rimlingo
     [HarmonyPatch(typeof(CharacterCardUtility), "DrawCharacterCard")]
     public static class PawnBioPatch
     {
-        [HarmonyPrefix]
-        public static void Prefix(Rect rect, Pawn pawn)
+        [HarmonyPostfix]
+        public static void Postfix(Rect rect, Pawn pawn)
         {
             // Ensure the pawn has at least "Common" language if no other language is set
             var comp = LanguageUtility.GetLanguagesComp(pawn);

@@ -12,12 +12,19 @@ namespace Rimlingo
             return pawn?.TryGetComp<CompPawnLanguages>();
         }
 
+        /// <summary>
+        /// Returns the language knowledge value of language with name <paramref name="langDefName"/> from <paramref name="pawn"/>
+        /// </summary>
+        /// <param name="pawn"></param>
+        /// <param name="langDefName"></param>
+        /// <returns></returns>
         public static float GetLanguageSkill(Pawn pawn, string langDefName)
         {
             return GetLanguagesComp(pawn)?.GetLanguageSkill(langDefName) ?? 0f;
         }
 
-        public static void IncreaseLanguageSkill(Pawn pawn, string langDefName, float amount)
+
+        public static void AlterLanguageSkill(Pawn pawn, string langDefName, float amount)
         {
             var comp = GetLanguagesComp(pawn);
             if (comp == null) return;

@@ -41,9 +41,9 @@ namespace Rimlingo
             int intA = LanguageUtility.GetPawnIntelligence(initiator);
             int intB = LanguageUtility.GetPawnIntelligence(recipient);
             if (intA > 0)
-                LanguageUtility.IncreaseLanguageSkill(initiator, chosenLanguage, intA);
+                LanguageUtility.AlterLanguageSkill(initiator, chosenLanguage, intA);
             if (intB > 0)
-                LanguageUtility.IncreaseLanguageSkill(recipient, chosenLanguage, intB);
+                LanguageUtility.AlterLanguageSkill(recipient, chosenLanguage, intB);
 
             if (initiator.def == recipient.def && initiator.Faction != recipient.Faction)
             {
