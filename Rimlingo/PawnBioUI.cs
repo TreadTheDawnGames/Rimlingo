@@ -5,6 +5,11 @@ namespace Rimlingo
 {
     public static class PawnBioUI
     {
+        /// <summary>
+        /// Draws the language skills for <paramref name="pawn"/> in <paramref name="rect"/>.
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="pawn"></param>
         public static void DrawLanguageSkills(Rect rect, Pawn pawn)
         {
             var comp = LanguageUtility.GetLanguagesComp(pawn);
