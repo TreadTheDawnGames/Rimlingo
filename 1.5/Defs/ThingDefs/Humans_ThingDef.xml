@@ -1,0 +1,14 @@
+<Defs>
+  <!-- Patch the base Human pawn -->
+  <ThingDef ParentName="Human">
+    <defName>Human</defName>
+    <comps>
+      <!-- 
+        We must add a CompProperties-based entry, not a direct Comp class.
+        This references our 'CompProperties_PawnLanguages', 
+        which in turn spawns 'CompPawnLanguages'.
+      -->
+      <li Class="Rimlingo.CompProperties_PawnLanguages" />
+    </comps>
+  </ThingDef>
+</Defs>

@@ -1,0 +1,43 @@
+<Defs>
+  <ThoughtDef>
+    <defName>LinguisticallyMisunderstood</defName>
+    <durationDays>0.2</durationDays>
+    <stackLimit>1</stackLimit>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>linguistic misunderstanding</label>
+        <baseMoodEffect>-4</baseMoodEffect>
+        <description>Communication was garbled, leading to frustration and confusion.</description>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>LinguisticallyUnderstood</defName>
+    <durationDays>0.2</durationDays>
+    <stackLimit>1</stackLimit>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>linguistic bond</label>
+        <baseMoodEffect>+4</baseMoodEffect>
+        <description>They experienced a pleasant connection through a shared language.</description>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>SharedLanguageBuff</defName>
+    <durationDays>1</durationDays>
+    <stackLimit>1</stackLimit>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>shared language appreciation</label>
+        <baseMoodEffect>+3</baseMoodEffect>
+        <description>Having a non-common language in common fosters friendly feelings.</description>
+      </li>
+    </stages>
+  </ThoughtDef>
+</Defs>
