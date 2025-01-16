@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "dgSpecHash": "7zL/qfPbQmxLxp6Q/jxP5IY2CVWOS1U8RJlsOoC6xasTIqtZdlkfODK9qGE1XC/fah5BMerye+iEog9sWgW3Xw==",
+  "success": true,
+  "projectFilePath": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimlingo\\Rimlingo.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\CASPI\\.nuget\\packages\\krafs.publicizer\\2.3.0\\krafs.publicizer.2.3.0.nupkg.sha512",
+    "C:\\Users\\CASPI\\.nuget\\packages\\krafs.rimworld.ref\\1.5.4297\\krafs.rimworld.ref.1.5.4297.nupkg.sha512",
+    "C:\\Users\\CASPI\\.nuget\\packages\\rimworld.multiplayerapi\\0.5.0\\rimworld.multiplayerapi.0.5.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Krafs.Rimworld.Ref 1.5.4297' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Krafs.Rimworld.Ref",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'RimWorld.MultiplayerAPI 0.5.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
+      "libraryId": "RimWorld.MultiplayerAPI",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
+}
