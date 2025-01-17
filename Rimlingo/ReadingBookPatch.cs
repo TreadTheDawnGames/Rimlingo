@@ -43,11 +43,11 @@ namespace Rimlingo
 
                 if (!string.IsNullOrEmpty(languageDef))
                 {
-                    int intellect = LanguageUtility.GetPawnIntelligence(reader);
+                    int intellect = LangUtils.GetPawnIntelligence(reader);
                     if (intellect > 0)
                     {
                         float gain = intellect * 2f;
-                        LanguageUtility.AlterLanguageSkill(reader, languageDef, gain);
+                        LangUtils.AlterLanguageSkill(reader, languageDef, gain);
                         Log.Message($"[Rimlingo] {reader.LabelShort} improved {languageDef} by {gain} via reading {book.def.label}!");
                     }
                 }

@@ -1,20 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using LudeonTK;
 using RimWorld;
 using Verse;
 
 namespace Rimlingo
 {
-    public static class LanguageUtility
+    public static class LangUtils
     {
+        //ToDo:
+        //get actual list of langs. Could get from actual langs (rimworld/languages), or from a langName.xml
+
+        public static List<string> AllLangs = new List<string> { "Common", "French", "German", "Pigese" };
+
+
         /// <summary>
         /// Retrieves the CompPawnLanguages component from <paramref name="pawn"/>, which manages language skills.
         /// </summary>
         /// <param name="pawn"></param>
         /// <returns></returns>
-        public static CompPawnLanguages GetLanguagesComp(Pawn pawn)
+        public static LangComp_Pawn GetLanguagesComp(Pawn pawn)
         {
-            return pawn?.TryGetComp<CompPawnLanguages>();
+            return pawn?.TryGetComp<LangComp_Pawn>();
         }
 
         /// <summary>
@@ -81,12 +89,12 @@ namespace Rimlingo
             var languagesB = compB.languageSkills.Where(kv => kv.Value > 1f).Select(kv => kv.Key).ToList();
 
             Log.Message("Langs A");
-            foreach( var language in languagesA )
+            foreach (var language in languagesA)
             {
                 Log.Message(language);
             }
             Log.Message("Langs B");
-            foreach( var language in languagesB )
+            foreach (var language in languagesB)
             {
                 Log.Message(language);
             }
@@ -123,9 +131,46 @@ namespace Rimlingo
         /// <param name="def"></param>
         public static void GiveThought(Pawn rememberingPawn, Pawn memoryPawn, ThoughtDef def)
         {
-  
+
             rememberingPawn?.needs?.mood?.thoughts?.memories?.TryGainMemory(def, memoryPawn);
             //1/16/2025 Worth trying this: Pawn_InteractionsTracker.AddInteractionThought(rememberingPawn, memoryPawn, def);
         }
+
+        public static bool PawnKnowsLanguage(Pawn pawn, string langDef)
+        {
+            return GetLanguagesComp(pawn).GetLanguageSkill(langDef) > 0;
+        }
+
+        [DebugAction("Rimlingo", "Teach Language", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        public static void TeachLanguage(Pawn pawn)
+        {
+
+            List<DebugMenuOption> list = new List<DebugMenuOption>();
+
+            for (int i = 0; i < AllLangs.Count; i++)
+            {
+                string lang = AllLangs[i];
+                list.Add(new DebugMenuOption(lang, DebugMenuOptionMode.Tool, delegate
+                {
+                    foreach (Pawn item in UI.MouseCell().GetThingList(Find.CurrentMap).OfType<Pawn>()
+                        .ToList())
+                    {
+                        if (!item.RaceProps.Humanlike || PawnKnowsLanguage(item, lang))
+                        {
+                            break;
+                        }
+                        AlterLanguageSkill(item, lang, 100f);
+                        DebugActionsUtility.DustPuffFrom(item);
+                        Log.Message($"{pawn.LabelShort} now knows {lang} with score {GetLanguageSkill(pawn, lang)}");
+                    }
+                }));
+            }
+            Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
+
+        }
+
+        
+
+        
     }
 }

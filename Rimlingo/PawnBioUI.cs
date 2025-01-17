@@ -12,7 +12,7 @@ namespace Rimlingo
         /// <param name="pawn"></param>
         public static void DrawLanguageSkills(Rect rect, Pawn pawn)
         {
-            var comp = LanguageUtility.GetLanguagesComp(pawn);
+            var comp = LangUtils.GetLanguagesComp(pawn);
             if (comp == null)
             {
                 Log.Warning($"[Rimlingo] No language component found for {pawn.LabelShort}.");

@@ -6,7 +6,7 @@ namespace Rimlingo
     {
         public CompProperties_PawnLanguages()
         {
-            this.compClass = typeof(CompPawnLanguages);
+            this.compClass = typeof(LangComp_Pawn);
         }
     }
 }

@@ -57,48 +57,51 @@ namespace Rimlingo
             }
 
             // Attempt best language
-            string chosenLanguage = LanguageUtility.DetermineBestLanguage(initiatingPawn, recipient);
+            string chosenLanguage = LangUtils.DetermineBestLanguage(initiatingPawn, recipient);
             Log.Message($"[Rimlingo] \"{chosenLanguage}\" was chosen for the interaction.");
             if (string.IsNullOrEmpty(chosenLanguage))
             {
-                LanguageUtility.GiveThought(initiatingPawn, recipient,
+                LangUtils.GiveThought(initiatingPawn, recipient,
                     DefDatabase<ThoughtDef>.GetNamed("LinguisticallyMisunderstood", true));
-                LanguageUtility.GiveThought(recipient, initiatingPawn,
+                LangUtils.GiveThought(recipient, initiatingPawn,
                     DefDatabase<ThoughtDef>.GetNamed("LinguisticallyMisunderstood", true));
                 //if no common language is found the interaction fails and original code is skipped. Will have to test to make sure it doesn't break.
                 Log.Message($"[Rimlingo] Interaction failed between {initiatingPawn} and {recipient}");
+                
                 //return false to skip default code;
                 __result = false;
-                return true;
+                return false;
             }
 
             if (chosenLanguage == "Common")
             {
                 Log.Message($"[Rimlingo] Interaction in Common took place between {initiatingPawn} and {recipient}");
                 //return true to run default code.
+                __result = true;
                 return true; // No special effect
             }
 
             //otherwise give special effect.
 
             // Non-common => good thoughts & skill gain
-            LanguageUtility.GiveThought(initiatingPawn, recipient,
+            LangUtils.GiveThought(initiatingPawn, recipient,
                 DefDatabase<ThoughtDef>.GetNamed("LinguisticallyUnderstood", true));
-            LanguageUtility.GiveThought(recipient, initiatingPawn,
+            LangUtils.GiveThought(recipient, initiatingPawn,
                 DefDatabase<ThoughtDef>.GetNamed("LinguisticallyUnderstood", true));
 
-            int intA = LanguageUtility.GetPawnIntelligence(initiatingPawn);
-            int intB = LanguageUtility.GetPawnIntelligence(recipient);
+            int intA = LangUtils.GetPawnIntelligence(initiatingPawn);
+            int intB = LangUtils.GetPawnIntelligence(recipient);
             if (intA > 0)
-                LanguageUtility.AlterLanguageSkill(initiatingPawn, chosenLanguage, intA);
+                LangUtils.AlterLanguageSkill(initiatingPawn, chosenLanguage, intA);
             if (intB > 0)
-                LanguageUtility.AlterLanguageSkill(recipient, chosenLanguage, intB);
+                LangUtils.AlterLanguageSkill(recipient, chosenLanguage, intB);
 
             if (initiatingPawn.def == recipient.def && initiatingPawn.Faction != recipient.Faction)
             {
                 Log.Message($"[Rimlingo] {initiatingPawn.LabelShort} & {recipient.LabelShort} share species but different factions!");
             }
 
+            __result = true;
             return false; //return false to run default code
         }
     }

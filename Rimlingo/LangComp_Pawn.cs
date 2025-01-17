@@ -3,7 +3,7 @@ using Verse;
 
 namespace Rimlingo
 {
-    public class CompPawnLanguages : ThingComp
+    public class LangComp_Pawn : ThingComp
     {
         // Key = "German", "French", etc. Value = skill [0..100]
         public Dictionary<string, float> languageSkills = new Dictionary<string, float>();

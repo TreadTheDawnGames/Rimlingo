@@ -16,10 +16,10 @@ public static class PawnSpawnPatch
         // Check if the pawn is humanlike
         if (__instance.RaceProps.Humanlike)
         {
-            if (__instance.TryGetComp<CompPawnLanguages>() == null)
+            if (__instance.TryGetComp<LangComp_Pawn>() == null)
             {
                 // Force-add the comp
-                var comp = new CompPawnLanguages();
+                var comp = new LangComp_Pawn();
                 comp.parent = __instance;
                 __instance.AllComps.Add(comp);
             }
