@@ -12,7 +12,7 @@ namespace Rimlingo
         //ToDo:
         //get actual list of langs. Could get from actual langs (rimworld/languages), or from a langName.xml
 
-        public static List<string> AllLangs = new List<string> { "Common", "French", "German", "Pigese" };
+        public static List<LangDef> AllLangs = new List<LangDef> { };
 
 
         /// <summary>
@@ -147,21 +147,27 @@ namespace Rimlingo
 
             List<DebugMenuOption> list = new List<DebugMenuOption>();
 
+            if(AllLangs.Count<=0)
+            {
+                list.Add(new DebugMenuOption("No langs", DebugMenuOptionMode.Action, () => { Log.Message("[Rimlingo] No langs to teach!"); }));
+                return;
+            }
+
             for (int i = 0; i < AllLangs.Count; i++)
             {
-                string lang = AllLangs[i];
-                list.Add(new DebugMenuOption(lang, DebugMenuOptionMode.Tool, delegate
+                LangDef lang = AllLangs[i];
+                list.Add(new DebugMenuOption(lang.Name, DebugMenuOptionMode.Tool, delegate
                 {
                     foreach (Pawn item in UI.MouseCell().GetThingList(Find.CurrentMap).OfType<Pawn>()
                         .ToList())
                     {
-                        if (!item.RaceProps.Humanlike || PawnKnowsLanguage(item, lang))
+                        if (!item.RaceProps.Humanlike || PawnKnowsLanguage(item, lang.Name))
                         {
                             break;
                         }
-                        AlterLanguageSkill(item, lang, 100f);
+                        AlterLanguageSkill(item, lang.Name, 100f);
                         DebugActionsUtility.DustPuffFrom(item);
-                        Log.Message($"{pawn.LabelShort} now knows {lang} with score {GetLanguageSkill(pawn, lang)}");
+                        Log.Message($"{pawn.LabelShort} now knows {lang} with score {GetLanguageSkill(pawn, lang.Name)}");
                     }
                 }));
             }
@@ -169,7 +175,17 @@ namespace Rimlingo
 
         }
 
-        
+        public static void CreateLang(Faction faction, string langName = null)
+        {
+            if(langName == null)
+            {
+                AllLangs.Add(new LangDef(faction.Name + "-ese", faction));
+            }
+            else
+            {
+                AllLangs.Add(new LangDef(langName, faction));
+            }
+        }
 
         
     }
