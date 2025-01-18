@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using HarmonyLib;
+using LudeonTK;
 using RimWorld;
 using RimWorld.Planet;
 using Verse;
@@ -17,25 +18,25 @@ namespace Rimlingo
         [HarmonyPostfix]
         public static void Postfix(ref Faction __result)
         {
-            if (!__result.def.humanlikeFaction)
+            if ( __result == null || !__result.def.humanlikeFaction)
                 return;
 
             string langName = "Common";
 
             if (!__result.IsPlayer)
             {
-                
-                if (__result.def.allowedCultures.Any())
+
+                try 
                 {
-                    //this is a really bad dumb way to to it but I'm sick of working on it so it's what we've got lol
-                    langName = __result.Name.Split(' ').Where(x => x.Length > 3).FirstOrDefault(); ;
+                  
+
+                    langName = NameGenerator.GenerateName(LangNamerDefOf.RandomLangNamer());
                         LangUtils.CreateLang(__result, langName);
                         Log.Message($"Created new language, \"{langName}\"" + (__result.IsPlayer ? "." : " for " + __result.Name + "."));
-
                 }
-                else
+                catch (Exception e)
                 {
-                    Log.Message($"[Rimlingo] Unable to name the language for {__result.Name}.");
+                    Log.Warning($"[Rimlingo] Unable to name the language for {__result.Name}: " + e.Message);
                 }
             }
             else
@@ -45,5 +46,6 @@ namespace Rimlingo
             }
          
         }
+
     }
 }

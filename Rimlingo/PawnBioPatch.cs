@@ -1,5 +1,6 @@
 using HarmonyLib;
 using RimWorld;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using Verse;
@@ -16,7 +17,8 @@ namespace Rimlingo
             var comp = LangUtils.GetLanguagesComp(pawn);
             if (comp != null && comp.languageSkills.Count == 0)
             {
-                comp.SetLanguageSkill("Common", 1f); // Default to "Common" with a skill level of 1
+                comp.SetLanguageSkill(LangUtils.AllLangs?.Where(l => pawn.Faction == l.BelongingFaction)?.FirstOrDefault()?.LangName ?? "Common", 100f);
+               // comp.SetLanguageSkill("Common", 1f); // Default to "Common" with a skill level of 1
             }
 
             // The vanilla method draws the top portion (name, faction, etc.)

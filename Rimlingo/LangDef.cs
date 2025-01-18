@@ -10,11 +10,11 @@ namespace Rimlingo
 {
     public class LangDef : Def
     {
-        public string Name;
+        public string LangName;
         public Faction BelongingFaction;
         public LangDef(string langName, Faction belongingFaction) 
         {
-            Name = langName;
+            LangName = langName;
             BelongingFaction = belongingFaction;
         }
 

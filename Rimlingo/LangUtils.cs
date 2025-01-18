@@ -156,18 +156,18 @@ namespace Rimlingo
             for (int i = 0; i < AllLangs.Count; i++)
             {
                 LangDef lang = AllLangs[i];
-                list.Add(new DebugMenuOption(lang.Name, DebugMenuOptionMode.Tool, delegate
+                list.Add(new DebugMenuOption(lang.LangName, DebugMenuOptionMode.Tool, delegate
                 {
                     foreach (Pawn item in UI.MouseCell().GetThingList(Find.CurrentMap).OfType<Pawn>()
                         .ToList())
                     {
-                        if (!item.RaceProps.Humanlike || PawnKnowsLanguage(item, lang.Name))
+                        if (!item.RaceProps.Humanlike || PawnKnowsLanguage(item, lang.LangName))
                         {
                             break;
                         }
-                        AlterLanguageSkill(item, lang.Name, 100f);
+                        AlterLanguageSkill(item, lang.LangName, 100f);
                         DebugActionsUtility.DustPuffFrom(item);
-                        Log.Message($"{pawn.LabelShort} now knows {lang} with score {GetLanguageSkill(pawn, lang.Name)}");
+                        Log.Message($"{pawn.LabelShort} now knows {lang} with score {GetLanguageSkill(pawn, lang.LangName)}");
                     }
                 }));
             }
@@ -179,7 +179,18 @@ namespace Rimlingo
         {
             if(langName == null)
             {
-                AllLangs.Add(new LangDef(faction.Name + "-ese", faction));
+                if(faction.Name!=null)
+                {
+                    AllLangs.Add(new LangDef(faction.Name + "-ese", faction));
+                    Log.Warning($"[Rimlingo] langName was null. Using fallback.");
+
+                }
+                else
+                {
+                    AllLangs.Add(new LangDef("The Impossible Language", faction));
+
+                    Log.Error($"[Rimlingo] Faction name was null. Using The impossible language has appeared!");
+                }
             }
             else
             {
