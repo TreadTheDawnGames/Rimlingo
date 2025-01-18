@@ -1,7 +1,7 @@
 using UnityEngine;
 using Verse;
 
-namespace Rimlingo
+namespace Rimguistics
 {
     public static class PawnBioUI
     {
@@ -15,7 +15,7 @@ namespace Rimlingo
             var comp = LangUtils.GetLanguagesComp(pawn);
             if (comp == null)
             {
-                Log.Warning($"[Rimlingo] No language component found for {pawn.LabelShort}.");
+                Log.Warning($"[Rimguistics] No language component found for {pawn.LabelShort}.");
                 return;
             }
 

@@ -8,7 +8,7 @@
         This references our 'CompProperties_PawnLanguages', 
         which in turn spawns 'CompPawnLanguages'.
       -->
-      <li Class="Rimlingo.CompProperties_PawnLanguages" />
+      <li Class="Rimguistics.CompProperties_PawnLanguages" />
     </comps>
   </ThingDef>
 </Defs>

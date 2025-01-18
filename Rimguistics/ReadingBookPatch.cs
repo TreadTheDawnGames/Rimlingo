@@ -5,7 +5,7 @@ using HarmonyLib;
 using RimWorld;
 using Verse;
 
-namespace Rimlingo
+namespace Rimguistics
 {
     [HarmonyPatch]
     public static class ReadingBookPatch
@@ -48,7 +48,7 @@ namespace Rimlingo
                     {
                         float gain = intellect * 2f;
                         LangUtils.AlterLanguageSkill(reader, languageDef, gain);
-                        Log.Message($"[Rimlingo] {reader.LabelShort} improved {languageDef} by {gain} via reading {book.def.label}!");
+                        Log.Message($"[Rimguistics] {reader.LabelShort} improved {languageDef} by {gain} via reading {book.def.label}!");
                     }
                 }
             }

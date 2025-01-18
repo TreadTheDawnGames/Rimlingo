@@ -9,7 +9,7 @@
         <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable][language_syllable]</li>
       </rulesStrings>
       <rulesFiles>
-        <li>language_syllable->WordParts/Syllables_Byzandinian</li>
+        <li>language_syllable->WordParts/Syllables_Byzantinian</li>
       </rulesFiles>
     </rulePack>
   </RulePackDef>

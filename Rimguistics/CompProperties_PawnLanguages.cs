@@ -1,12 +1,12 @@
 ﻿using Verse;
 
-namespace Rimlingo
+namespace Rimguistics
 {
     public class CompProperties_PawnLanguages : CompProperties
     {
         public CompProperties_PawnLanguages()
         {
-            this.compClass = typeof(LangComp_Pawn);
+            this.compClass = typeof(Pawn_LangComp);
         }
     }
 }

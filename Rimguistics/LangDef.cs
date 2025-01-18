@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace Rimlingo
+namespace Rimguistics
 {
     public class LangDef : Def
     {
@@ -18,5 +18,9 @@ namespace Rimlingo
             BelongingFaction = belongingFaction;
         }
 
+        public override string ToString()
+        {
+            return $"{LangName}, {BelongingFaction?.Name ?? "Null"}";// base.ToString();
+        }
     }
 }

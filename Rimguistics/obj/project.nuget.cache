@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+fKUY6s66MKthnclBms8l0s295L+VI8GGdSAYe3G3vIeiAtEn3Gh84WngU1TEF60ILpjJx5+zQ8ZOFeB+IL2bg==",
+  "dgSpecHash": "SqidrOl00PPpZVJt7kZSwij8UfUshEPBIIhrptj087h1w7e63vxMdMTdiSCC3qIChhcAD26crvV1y+NMnAbTgA==",
   "success": true,
-  "projectFilePath": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimlingo\\Rimlingo.csproj",
+  "projectFilePath": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimguistics\\Rimguistics.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\CASPI\\.nuget\\packages\\krafs.rimworld.ref\\1.5.4297\\krafs.rimworld.ref.1.5.4297.nupkg.sha512",
     "C:\\Users\\CASPI\\.nuget\\packages\\lib.harmony\\2.3.3\\lib.harmony.2.3.3.nupkg.sha512"

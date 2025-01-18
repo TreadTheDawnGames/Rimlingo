@@ -1,5 +1,19 @@
 <Defs>
   <ThoughtDef>
+    <defName>LinguisticWall</defName>
+    <durationDays>0.2</durationDays>
+    <stackLimit>1</stackLimit>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>linguistic wall</label>
+        <baseMoodEffect>-4</baseMoodEffect>
+        <description>I was unable to communicate with them. Nobody knew what was happening.</description>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+  <ThoughtDef>
     <defName>LinguisticallyMisunderstood</defName>
     <durationDays>0.2</durationDays>
     <stackLimit>1</stackLimit>
@@ -7,22 +21,66 @@
     <stages>
       <li>
         <label>linguistic misunderstanding</label>
-        <baseMoodEffect>-4</baseMoodEffect>
+        <baseMoodEffect>-3</baseMoodEffect>
         <description>Communication was garbled, leading to frustration and confusion.</description>
       </li>
     </stages>
   </ThoughtDef>
-
+  
   <ThoughtDef>
-    <defName>LinguisticallyUnderstood</defName>
+    <defName>LinguisticallyConfused</defName>
     <durationDays>0.2</durationDays>
     <stackLimit>1</stackLimit>
     <thoughtClass>Thought_Memory</thoughtClass>
     <stages>
       <li>
-        <label>linguistic bond</label>
-        <baseMoodEffect>+4</baseMoodEffect>
-        <description>They experienced a pleasant connection through a shared language.</description>
+        <label>linguistic confusion</label>
+        <baseMoodEffect>-2</baseMoodEffect>
+        <description>Did {pawn_pronoun} really say what I think {pawn_pronoun} said?</description>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+  <ThoughtDef>
+    <defName>LinguisticMistake</defName>
+    <durationDays>0.2</durationDays>
+    <stackLimit>1</stackLimit>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>linguistic mistake</label>
+        <baseMoodEffect>-1</baseMoodEffect>
+        <description>That was a questionable conversation. I'm not sure exactly what was said.</description>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <!-- Positive -->
+  
+  <ThoughtDef>
+    <defName>LinguisticOptimism</defName>
+    <durationDays>0.2</durationDays>
+    <stackLimit>1</stackLimit>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>linguistic optimism</label>
+        <baseMoodEffect>+1</baseMoodEffect>
+        <description>They're coming along really well with their language skill.</description>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+  <ThoughtDef>
+    <defName>LinguisticSuccess</defName>
+    <durationDays>0.2</durationDays>
+    <stackLimit>1</stackLimit>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>linguistic success</label>
+        <baseMoodEffect>+2</baseMoodEffect>
+        <description>They spoke to me in a common language!</description>
       </li>
     </stages>
   </ThoughtDef>
@@ -40,4 +98,19 @@
       </li>
     </stages>
   </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>LinguisticallyUnderstood</defName>
+    <durationDays>0.2</durationDays>
+    <stackLimit>1</stackLimit>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>linguistic bond</label>
+        <baseMoodEffect>+4</baseMoodEffect>
+        <description>I'm so glad I got to talk to them!</description>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
 </Defs>

@@ -5,7 +5,7 @@ using System.Reflection;
 using UnityEngine;
 using Verse;
 
-namespace Rimlingo
+namespace Rimguistics
 {
     [HarmonyPatch(typeof(CharacterCardUtility), "DrawCharacterCard")]
     public static class PawnBioPatch
@@ -15,10 +15,10 @@ namespace Rimlingo
         {
             // Ensure the pawn has at least "Common" language if no other language is set
             var comp = LangUtils.GetLanguagesComp(pawn);
-            if (comp != null && comp.languageSkills.Count == 0)
+            if(comp == null )
             {
-                comp.SetLanguageSkill(LangUtils.AllLangs?.Where(l => pawn.Faction == l.BelongingFaction)?.FirstOrDefault()?.LangName ?? "Common", 100f);
-               // comp.SetLanguageSkill("Common", 1f); // Default to "Common" with a skill level of 1
+                Log.Error($"[Rimguistics] LangComp for {pawn.LabelShort} was null!");
+                return;
             }
 
             // The vanilla method draws the top portion (name, faction, etc.)
