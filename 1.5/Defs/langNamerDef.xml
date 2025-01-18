@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <RulePackDef>
+    <defName>ByzLangNamer</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_name(p=0.5)->[language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable][language_syllable]</li>
+      </rulesStrings>
+      <rulesFiles>
+        <li>language_syllable->WordParts/Syllables_Byzantinian</li>
+      </rulesFiles>
+    </rulePack>
+  </RulePackDef>
+  
+  <RulePackDef>
+    <defName>DirtLangNamer</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_name(p=0.5)->[language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable][language_syllable]</li>
+      </rulesStrings>
+      <rulesFiles>
+        <li>language_syllable->WordParts/Syllables_Dirtmole</li>
+      </rulesFiles>
+    </rulePack>
+  </RulePackDef>
+
+<RulePackDef>
+    <defName>EnglishLangNamer</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_name(p=0.5)->[language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable][language_syllable]</li>
+      </rulesStrings>
+      <rulesFiles>
+        <li>language_syllable->WordParts/Syllables_English</li>
+      </rulesFiles>
+    </rulePack>
+  </RulePackDef>
+
+<RulePackDef>
+    <defName>GalicianLangNamer</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_name(p=0.5)->[language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable][language_syllable]</li>
+      </rulesStrings>
+      <rulesFiles>
+        <li>language_syllable->WordParts/Syllables_Galician</li>
+      </rulesFiles>
+    </rulePack>
+  </RulePackDef>
+  
+  <RulePackDef>
+    <defName>ImpidLangNamer</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_name(p=0.5)->[language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable][language_syllable]</li>
+      </rulesStrings>
+      <rulesFiles>
+        <li>language_syllable->WordParts/Syllables_Impid</li>
+      </rulesFiles>
+    </rulePack>
+  </RulePackDef>
+
+<RulePackDef>
+    <defName>NeanderthalLangNamer</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_name(p=0.5)->[language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable][language_syllable]</li>
+      </rulesStrings>
+      <rulesFiles>
+        <li>language_syllable->WordParts/Syllables_Neanderthal</li>
+      </rulesFiles>
+    </rulePack>
+  </RulePackDef>
+
+<RulePackDef>
+    <defName>PigLangNamer</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_name(p=0.5)->[language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable][language_syllable]</li>
+      </rulesStrings>
+      <rulesFiles>
+        <li>language_syllable->WordParts/Syllables_Pig</li>
+      </rulesFiles>
+    </rulePack>
+  </RulePackDef>
+
+<RulePackDef>
+    <defName>WasterLangNamer</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_name(p=0.5)->[language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable][language_syllable]</li>
+      </rulesStrings>
+      <rulesFiles>
+        <li>language_syllable->WordParts/Syllables_Waster</li>
+      </rulesFiles>
+    </rulePack>
+  </RulePackDef>
+
+<RulePackDef>
+    <defName>YttakinLangNamer</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_name(p=0.5)->[language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable]</li>
+        <li>r_name(p=0.25)->[language_syllable][language_syllable][language_syllable][language_syllable]</li>
+      </rulesStrings>
+      <rulesFiles>
+        <li>language_syllable->WordParts/Syllables_Yttakin</li>
+      </rulesFiles>
+    </rulePack>
+  </RulePackDef>
+
+
+  
+
+
+
+</Defs>

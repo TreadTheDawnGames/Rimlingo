@@ -1,26 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo\\Rimlingo\\Rimlingo.csproj": {}
+    "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimguistics\\Rimlingo.csproj": {}
   },
   "projects": {
-    "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo\\Rimlingo\\Rimlingo.csproj": {
+    "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimguistics\\Rimlingo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo\\Rimlingo\\Rimlingo.csproj",
-        "projectName": "Rimlingo",
-        "projectPath": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo\\Rimlingo\\Rimlingo.csproj",
-        "packagesPath": "C:\\Users\\optim\\.nuget\\packages\\",
-        "outputPath": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\Rimlingo\\Rimlingo\\obj\\",
+        "projectUniqueName": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimguistics\\Rimlingo.csproj",
+        "projectName": "Rimguistics",
+        "projectPath": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimguistics\\Rimlingo.csproj",
+        "packagesPath": "C:\\Users\\CASPI\\.nuget\\packages\\",
+        "outputPath": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimguistics\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
-        "UsingMicrosoftNETSdk": false,
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\optim\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\CASPI\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -34,11 +29,6 @@
           "net472": {
             "projectReferences": {}
           }
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {

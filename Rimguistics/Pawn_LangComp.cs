@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Verse;
 
-namespace Rimlingo
+namespace Rimguistics
 {
-    public class CompPawnLanguages : ThingComp
+    public class Pawn_LangComp : ThingComp
     {
         // Key = "German", "French", etc. Value = skill [0..100]
         public Dictionary<string, float> languageSkills = new Dictionary<string, float>();
