@@ -1,0 +1,31 @@
+ <Defs>
+ <InteractionDef>
+    <defName>LanguageInteractionSuccess</defName>
+    <label>language interaction sucess</label>
+    <workerClass>InteractionWorker</workerClass>
+    <symbol>Things/Mote/SpeechSymbols/LinguisticInteractionSuccess</symbol>
+    <recipientThought>LinguisticallyUnderstood</recipientThought>
+    <logRulesInitiator>
+      <rulesStrings>
+        <li>r_logentry->[INITIATOR_nameDef] [complimented] [RECIPIENT_nameDef].</li>
+
+        <li>complimented(p=3)->spoke in a shared language with</li>
+      </rulesStrings>
+    </logRulesInitiator>
+  </InteractionDef>
+  
+ <InteractionDef>
+    <defName>LanguageInteractionFail</defName>
+    <label>language interaction fail</label>
+    <workerClass>InteractionWorker</workerClass>
+    <symbol>Things/Mote/SpeechSymbols/LinguisticInteractionFail</symbol>
+    <recipientThought>LinguisticallyMisunderstood</recipientThought>
+    <logRulesInitiator>
+      <rulesStrings>
+        <li>r_logentry->[INITIATOR_nameDef] [complimented] [RECIPIENT_nameDef].</li>
+
+        <li>complimented(p=3)->failed to speak to</li>
+      </rulesStrings>
+    </logRulesInitiator>
+  </InteractionDef>
+  </Defs>

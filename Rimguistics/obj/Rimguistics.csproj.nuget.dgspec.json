@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimguistics\\Rimguistics.csproj": {}
+    "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimguistics\\Rimguistics\\Rimguistics.csproj": {}
   },
   "projects": {
-    "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimguistics\\Rimguistics.csproj": {
+    "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimguistics\\Rimguistics\\Rimguistics.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimguistics\\Rimguistics.csproj",
+        "projectUniqueName": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimguistics\\Rimguistics\\Rimguistics.csproj",
         "projectName": "Rimguistics",
-        "projectPath": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimguistics\\Rimguistics.csproj",
+        "projectPath": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimguistics\\Rimguistics\\Rimguistics.csproj",
         "packagesPath": "C:\\Users\\CASPI\\.nuget\\packages\\",
-        "outputPath": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimlingo\\Rimguistics\\obj\\",
+        "outputPath": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimguistics\\Rimguistics\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "configFilePaths": [
@@ -43,20 +43,6 @@
               "version": "[2.3.3, )"
             }
           }
-        }
-      },
-      "runtimes": {
-        "win": {
-          "#import": []
-        },
-        "win-arm64": {
-          "#import": []
-        },
-        "win-x64": {
-          "#import": []
-        },
-        "win-x86": {
-          "#import": []
         }
       }
     }

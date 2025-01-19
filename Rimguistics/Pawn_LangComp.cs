@@ -16,7 +16,8 @@ namespace Rimguistics
 
         public float GetLanguageSkill(string languageDefName)
         {
-            return languageSkills.TryGetValue(languageDefName, out float skill) ? skill : 0f;
+            //always learn at least 1% so pawns can learn even if pawn has 0 int 
+            return languageSkills.TryGetValue(languageDefName, out float skill) ? skill : 1f;
         }
 
         public void SetLanguageSkill(string languageDefName, float value)

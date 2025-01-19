@@ -37,6 +37,12 @@ namespace Rimguistics
             Log.Message("Getting Language Skill");
             return GetLanguagesComp(pawn)?.GetLanguageSkill(langDefName) ?? 0f;
         }
+        
+        public static float GetLanguageSkill(Pawn pawn, LangDef langDefName)
+        {
+            Log.Message("Getting Language Skill");
+            return GetLanguagesComp(pawn)?.GetLanguageSkill(langDefName.LangName) ?? 0f;
+        }
 
         /// <summary>
         /// Changes <paramref name="pawn"/>'s <paramref name="langDefName"/> knowledge score by <paramref name="amount"/>, capped at 100.
@@ -90,7 +96,8 @@ namespace Rimguistics
             var languagesA = compA.languageSkills.Where(kv => kv.Value >=0f).Select(kv => kv.Key).ToList();
             var languagesB = compB.languageSkills.Where(kv => kv.Value >=0f).Select(kv => kv.Key).ToList();
 
-            Log.Message("Langs A");
+           /* Debug list for pawn languages
+            * Log.Message("Langs A");
             foreach (var language in languagesA)
             {
                 Log.Message(language);
@@ -99,7 +106,7 @@ namespace Rimguistics
             foreach (var language in languagesB)
             {
                 Log.Message(language);
-            }
+            }*/
 
             var mutual = languagesA.Intersect(languagesB).ToList();
             if (!mutual.Any())
@@ -108,6 +115,10 @@ namespace Rimguistics
                 return null;
             }
             //This should return the language they both have the highest score in, not necessarily the first or default. Doing so will mean pawns will have default langs not based on the ones they know the best.
+            
+            //TODO: Return language with highest score combined(!?). This will determine which language is best known between both pawns.
+            //      if pawn A has common 100 and french 10 and pawn B has common 0 and french 100, the scores are common 100 and french 110, so french is the chosen language.
+            
             var nonCommon = mutual.FirstOrDefault(l => l != "Common");
             if (!string.IsNullOrEmpty(nonCommon))
             {
@@ -275,46 +286,16 @@ namespace Rimguistics
 
         }
 
-        [DebugAction("Rimguistics", "Teach Language", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
-        public static void TeachLanguage(Pawn pawn)
+        public static void RemoveLangFromPawn(Pawn pawn, LangDef lang)
         {
-           // Log.Message("Teaching Language");
-            List<FloatMenuOption> list = new List<FloatMenuOption>();
-
-            if (LangUtils.AllLangs.Count <= 0)
+            try
             {
-                list.Add(new FloatMenuOption("No langs", () => { Log.Message("[Rimguistics] No langs to teach!"); }));
-                return;
+
+                GetLanguagesComp(pawn).languageSkills.Remove(lang.LangName);
             }
-
-            for (int i = 0; i < LangUtils.AllLangs.Count; i++)
+            catch
             {
-                LangDef lang = LangUtils.AllLangs[i];
-                list.Add(new FloatMenuOption($"{lang.LangName}, {lang.BelongingFaction}", delegate
-                {
-                    foreach (Pawn item in UI.MouseCell().GetThingList(Find.CurrentMap).OfType<Pawn>()
-                        .ToList())
-                    {
-                        if (!item.RaceProps.Humanlike || LangUtils.PawnKnowsLanguage(item, lang.LangName))
-                        {
-                            break;
-                        }
-                        LangUtils.AlterLanguageSkill(item, lang.LangName, 100f);
-                        DebugActionsUtility.DustPuffFrom(item);
-                        Log.Message($"{pawn.LabelShort} now knows {lang} with score {LangUtils.GetLanguageSkill(pawn, lang.LangName)}");
-                    }
-                }));
-            }
-            Find.WindowStack.Add(new FloatMenu(list));
-
-        }
-
-        [DebugOutput(category = "Rimguistics", name = "List all Languages", onlyWhenPlaying = false)]
-        public static void ListAllLangs()
-        {
-            foreach(var lang in AllLangs)
-            {
-                Log.Message(lang.ToString());
+                Log.Message($"[Rimguistics] Unable to remove {lang.LangName ?? "Unknown"} from {pawn.LabelShort ?? "Pawn"}.");
             }
         }
     }

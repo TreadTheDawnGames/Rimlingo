@@ -45,11 +45,14 @@ namespace Rimguistics
 
                 //if no common language is found the interaction fails and original code is skipped. Will have to test to make sure it doesn't break.
                 Log.Message($"[Rimguistics] Interaction failed between {initiatingPawn} and {recipient}. No shared language.");
+                MoteMaker.MakeInteractionBubble(initiatingPawn, recipient, LangInteractionsDefOf.LanguageInteractionFail.interactionMote, LangInteractionsDefOf.LanguageInteractionFail.GetSymbol(initiatingPawn.Faction, initiatingPawn.Ideo), LangInteractionsDefOf.LanguageInteractionFail.GetSymbolColor(initiatingPawn.Faction));
 
+                //the interaction succeeded according to the game (if it doesn't it throws an error)
+                __result = true;
                 //return false to skip default code; the interaction failed because the pawns were unable to communicate.
-                __result = false;
                 return false;
             }
+
             Log.Message($"[Rimguistics] \"{chosenLanguage}\" was chosen for the interaction.");
 
             //if Common is the only language, no benefits happen. Skip to default code.
@@ -61,10 +64,18 @@ namespace Rimguistics
                 return true; 
             }
 
+
             //otherwise give special effect.
+
+            float lowerSkill = Math.Min(LangUtils.GetLanguageSkill(recipient, chosenLanguage), LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguage));
+            bool initiatorSkillTooLow = LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguage) < LangUtils.GetLanguageSkill(recipient, chosenLanguage);
 
             // Non-common => good thoughts & skill gain
             DoLanguageThoughts(recipient, initiatingPawn, chosenLanguage);
+
+            DoLearning(recipient, initiatingPawn, chosenLanguage);
+
+
 
             //Log pawns from different factions interacted.
             if (initiatingPawn.def == recipient.def && initiatingPawn.Faction != recipient.Faction)
@@ -72,8 +83,20 @@ namespace Rimguistics
                 Log.Message($"[Rimguistics] {initiatingPawn.LabelShort} & {recipient.LabelShort} share species but different factions!");
             }
 
+            if(lowerSkill < 25f)
+            {
+                string tooLowPawn = initiatorSkillTooLow ? initiatingPawn.LabelShort :  recipient.LabelShort;
+                Log.Message($"[Rimguistics] Interaction tried to take place between {initiatingPawn} and {recipient} in {chosenLanguage}, but {tooLowPawn}'s skill was too low! ({lowerSkill})");
+                //the interaction succeeded according to the game (if it doesn't it throws an error)
+                __result = true;
+                MoteMaker.MakeInteractionBubble(initiatingPawn, recipient, LangInteractionsDefOf.LanguageInteractionFail.interactionMote, LangInteractionsDefOf.LanguageInteractionFail.GetSymbol(initiatingPawn.Faction, initiatingPawn.Ideo), LangInteractionsDefOf.LanguageInteractionFail.GetSymbolColor(initiatingPawn.Faction));
+                //return false to skip default code
+                return false;
+            }
             //Log interaction.
-            Log.Message($"[Rimguistics] Interaction took place between {initiatingPawn} and {recipient} in {chosenLanguage}.");
+            Log.Message($"[Rimguistics] Interaction took place between {initiatingPawn} and {recipient} in {chosenLanguage}. Skill: {lowerSkill}");
+
+
 
             __result = true;
             return true; //return true to run default code
@@ -87,6 +110,8 @@ namespace Rimguistics
         /// <param name="chosenLanguage"></param>
         private static void DoLanguageThoughts(Pawn recipient, Pawn initiatingPawn, string chosenLanguage)
         {
+            //TODO: Make buffs only happen when speaking to a pawn not of initiator's faction.
+
             float lowerSkill = Math.Min(LangUtils.GetLanguageSkill(recipient, chosenLanguage), LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguage));
             //Get langThought scaled with the lower score of the interacting pawns.
             var langThought = LangUtils.GetLangThoughtBasedOnFloat(lowerSkill);
@@ -94,9 +119,13 @@ namespace Rimguistics
             LangUtils.GiveThought(initiatingPawn, recipient, langThought);
             LangUtils.GiveThought(recipient, initiatingPawn, langThought);
 
-            //TODO: Make buffs only happen when speaking to a pawn not of initiator's faction.
+        }
+
+        private static void DoLearning(Pawn recipient, Pawn initiatingPawn, string chosenLanguage)
+        {
             //TODO: Balance language learning so it's not done overnight. Need a formula... maybe something like LanguageSkill += Intelligence/20 min 1.
             //TODO: Unlearn languages that aren't being used.
+            //TODO: only learn if the other pawn is better at the language than the other
 
             int intA = LangUtils.GetPawnIntelligence(initiatingPawn);
             int intB = LangUtils.GetPawnIntelligence(recipient);
