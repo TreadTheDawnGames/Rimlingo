@@ -28,6 +28,11 @@ namespace Rimguistics
             foreach (var kvp in comp.Languages)
             {
                 string info = $"{kvp.Key}: {Math.Min(kvp.Value.Skill, 100f):F1}";
+                if(RimguisticsMod.Settings.showFullLangKnowledge)
+                {
+                    info = $"{kvp.Key}: {kvp.Value.Skill:F1}";
+
+                }
                 Widgets.Label(rect, info);
                 rect.y += Text.LineHeight;
             }

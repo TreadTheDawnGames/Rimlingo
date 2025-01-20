@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "GWpr3GvxAno1TGXhIF/tEjcyk/868BHC1zQoOJhDv+7FxIp1wa0hdItPf9iY11SGhnMlH5sMUpuVW1EvgMgwwg==",
+  "dgSpecHash": "YkF8SzMFm7YtAEv2OKkMYFFda2uK2KGVfgcUaUqPRTIKpmqZKqkP3nTl4FFLfopyPnlSF/Wae9aFGMyETV5tkA==",
   "success": true,
   "projectFilePath": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimguistics\\Rimguistics\\Rimguistics.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\CASPI\\.nuget\\packages\\krafs.publicizer\\2.3.0\\krafs.publicizer.2.3.0.nupkg.sha512",
     "C:\\Users\\CASPI\\.nuget\\packages\\krafs.rimworld.ref\\1.5.4297\\krafs.rimworld.ref.1.5.4297.nupkg.sha512",
     "C:\\Users\\CASPI\\.nuget\\packages\\lib.harmony\\2.3.3\\lib.harmony.2.3.3.nupkg.sha512"
   ],

@@ -8,13 +8,25 @@ using Verse;
 
 namespace Rimguistics
 {
-    public static class LangUtils
-    {
-        //ToDo:
-        //get actual list of langs. Could get from actual langs (rimworld/languages), or from a langName.xml
 
+ 
+    public class LangUtils : GameComponent
+    { 
+        
         public static List<LangDef> AllLangs = new List<LangDef> { };
 
+        public LangUtils(Game game)
+        {
+            AllLangs = new List<LangDef>();
+            Scribe_Collections.Look(ref AllLangs, "TTDG.Rimguistics.AllLangs");
+        }
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Collections.Look(ref AllLangs, "TTDG.Rimguistics.AllLangs");
+
+        }
 
         /// <summary>
         /// Retrieves the CompPawnLanguages component from <paramref name="pawn"/>, which manages language skills.
@@ -60,6 +72,7 @@ namespace Rimguistics
             }
             float current = comp.GetLanguageSkill(langDefName);
             float newVal = Math.Min(current + amount, 5000f);
+            newVal = newVal < 0 ? 0 : newVal;
 
             comp.SetLanguageSkill(langDefName, newVal);
 
@@ -211,20 +224,20 @@ namespace Rimguistics
             {
                 if(faction.Name!=null)
                 {
-                    AllLangs.Add(new LangDef(faction.Name + "-ese", faction));
+                    LangUtils.AllLangs.Add(new LangDef(faction.Name + "-ese", faction));
                     Log.Warning($"[Rimguistics] langName was null. Using fallback.");
 
                 }
                 else
                 {
-                    AllLangs.Add(new LangDef("The Impossible Language", faction));
+                    LangUtils.AllLangs.Add(new LangDef("The Impossible Language", faction));
 
                     Log.Error($"[Rimguistics] Faction name was null. Using The impossible language has appeared!");
                 }
             }
             else
             {
-                AllLangs.Add(new LangDef(langName, faction));
+                LangUtils.AllLangs.Add(new LangDef(langName, faction));
             }
         }
 
@@ -285,9 +298,11 @@ namespace Rimguistics
         /// <param name="skill"></param>
         /// <param name="lang"></param>
         /// <returns></returns>
-        public static ThoughtDef GetLangThoughtBasedOnFloat(float skill)
+        public static ThoughtDef GetLangThoughtBasedOnFloat(float input)
         {
             Log.Message("Finished Getting Language Skill");
+
+            int skill = (int)input;
 
             try
             {
@@ -311,6 +326,7 @@ namespace Rimguistics
                     case 7:
                         return DefDatabase<ThoughtDef>.GetNamed("LinguisticallyUnderstood", true);
                     default:
+                        Log.Error("Default case hit in GetLangThoughtBasedOnFloat(float). Skill: " + skill);
                         return null;
                 }
             }

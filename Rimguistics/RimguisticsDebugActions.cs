@@ -91,10 +91,14 @@ namespace AdventOfCode
         [DebugOutput(category = "Rimguistics", name = "List all Languages", onlyWhenPlaying = false)]
         public static void ListAllLangs()
         {
+            Log.openOnMessage = true;
+            if (!LangUtils.AllLangs.Any())
+                Log.Error("[Rimguistics] No langs in AllLangs!");
             foreach (var lang in LangUtils.AllLangs)
             {
                 Log.Message(lang.ToString());
             }
+            Log.openOnMessage = false;
         }
 
         [DebugAction("Rimguistics", "List all pawn's languages", allowedGameStates = AllowedGameStates.PlayingOnMap, actionType = DebugActionType.ToolMapForPawns)]

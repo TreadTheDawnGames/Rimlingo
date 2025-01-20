@@ -63,8 +63,7 @@ namespace Rimguistics
             {
                 Log.Message($"[Rimguistics] Interaction took place between {initiatingPawn} and {recipient} in Common.");
                 //Pawns can learn common
-                DoLearning(recipient, chosenLanguage);
-                DoLearning(initiatingPawn, chosenLanguage);
+                DoLearningPair(initiatingPawn, recipient, chosenLanguage);
 
                 //return true to run default code.
                 __result = true;
@@ -77,10 +76,8 @@ namespace Rimguistics
             bool initiatorSkillTooLow = LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguage) < LangUtils.GetLanguageSkill(recipient, chosenLanguage);
 
             DoLanguageThoughts(recipient, initiatingPawn, chosenLanguage);
-            
-            DoLearning(initiatingPawn, chosenLanguage);
-            DoLearning(recipient, chosenLanguage);
 
+            DoLearningPair(initiatingPawn, recipient, chosenLanguage);
             //Log pawns from different factions interacted.
             if (initiatingPawn.def == recipient.def && initiatingPawn.Faction != recipient.Faction)
             {
@@ -136,12 +133,23 @@ namespace Rimguistics
 
             float lowerSkill = Math.Min(LangUtils.GetLanguageSkill(recipient, chosenLanguageName), LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguageName));
             //Get langThought scaled with the lower score of the interacting pawns.
-            var langThought = LangUtils.GetLangThoughtBasedOnFloat(lowerSkill);
+            ThoughtDef langThought = LangUtils.GetLangThoughtBasedOnFloat(lowerSkill);
 
             LangUtils.GiveThought(initiatingPawn, recipient, langThought);
             LangUtils.GiveThought(recipient, initiatingPawn, langThought);
 
         }
+
+        private static void DoLearningPair(Pawn initiator, Pawn receiver, string chosenLanguage)
+        {
+
+            float initSkill = LangUtils.GetLanguageSkill(initiator, chosenLanguage);
+            float recSkill = LangUtils.GetLanguageSkill(receiver, chosenLanguage);
+
+            DoLearning(initiator, chosenLanguage, recSkill);
+            DoLearning(receiver, chosenLanguage, initSkill);
+        }
+
 
         /// <summary>
         /// Performs the logic to increase the involved pawns' skill in <paramref name="chosenLanguage"/>
@@ -149,20 +157,35 @@ namespace Rimguistics
         /// <param name="recipient"></param>
         /// <param name="initiatingPawn"></param>
         /// <param name="chosenLanguage"></param>
-        private static void DoLearning(Pawn learner, string chosenLanguage)
+        private static float DoLearning(Pawn learner, string chosenLanguage, float maxCanLearn = -1)
         {
-            //TODO: Unlearn languages that aren't being used.
-            //TODO: only learn if the other pawn is better at the language than the other
 
+            float skill = LangUtils.GetLanguageSkill(learner, chosenLanguage);
             var langComp = LangUtils.GetPawnLangComp(learner);
 
             float learnFactor = LangUtils.GetPawnLearningFactor(learner);
+
+            
+
             //If pawn is smarter than 0, increase langScore.
             if (learnFactor > 0)
             {
+                //TODO: only learn if the other pawn is better at the language than the other
+/*
+                if (maxCanLearn >= 0)
+                {
+                    if(skill + learnFactor > maxCanLearn)
+                    {
+                            float newSkill = maxCanLearn - skill;
+                        learnFactor = newSkill > 0 ? newSkill : learnFactor;
+                    }
+
+                }*/
+
                 LangUtils.AlterLanguageSkill(learner, chosenLanguage, learnFactor);
             }
 
+            //TODO: Make the learn factor so smart people won't lose langs more quickly
             //Deteriorate each language not used
             foreach (var lang in langComp.Languages)
             {
@@ -187,6 +210,8 @@ namespace Rimguistics
                     }
                 }
             }
+
+            return LangUtils.GetLanguageSkill(learner, chosenLanguage);
         }
 
         /// <summary>
@@ -222,12 +247,7 @@ namespace Rimguistics
                 LangUtils.AlterLanguageSkill(recipient, bestLangOfInitiator, 0);
             }
 
-
-            //this has to happen after because if it doesn't it can't find any language skill of the prominent lang.
-            LangUtils.GiveThought(initiatingPawn, recipient, DefDatabase<ThoughtDef>.GetNamed("LinguisticWall", true));
-            LangUtils.GiveThought(recipient, initiatingPawn, DefDatabase<ThoughtDef>.GetNamed("LinguisticWall", true));
-
-
+            DoLanguageThoughts(recipient, initiatingPawn, "Common");
         }
     }
 }
