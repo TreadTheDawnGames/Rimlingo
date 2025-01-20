@@ -12,35 +12,8 @@ namespace Rimguistics
 
         public override void PostExposeData()
         {
-
             base.PostExposeData();
-/*
-            if (Scribe.mode == LoadSaveMode.Saving)
-            {
-                Log.Message("Saving".Colorize(Color.gray));
-                var langList = Languages.Values.ToList();
-                foreach (var lang in langList)
-                {
-                    Log.Message(lang.ToString());
-                }
-
-            }*/
-
-                Scribe_Collections.Look(ref Languages, "TTDG.languageSkills");
-
-            /*if (Scribe.mode == LoadSaveMode.PostLoadInit)
-            {
-                Log.Message("PostLoadInit".Colorize(Color.blue));
-                List<LangDef> langList = new List<LangDef> { };
-                Dictionary<string, LangDef> langDict = new Dictionary<string, LangDef>();
-                Scribe_Collections.Look(ref langList, "TTDG.languageSkills");
-                foreach (var lang in langList)
-                {
-                    Log.Message(lang.ToString());
-                    langDict.Add(lang.LangName, lang);
-                }
-                Languages = langDict;
-            }*/
+            Scribe_Collections.Look(ref Languages, "TTDG.languageSkills");
         }
 
         public float GetLanguageSkill(string languageDefName)
