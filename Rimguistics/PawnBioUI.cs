@@ -1,5 +1,6 @@
 using UnityEngine;
 using Verse;
+using System;
 
 namespace Rimguistics
 {
@@ -12,7 +13,7 @@ namespace Rimguistics
         /// <param name="pawn"></param>
         public static void DrawLanguageSkills(Rect rect, Pawn pawn)
         {
-            var comp = LangUtils.GetLanguagesComp(pawn);
+            var comp = LangUtils.GetPawnLangComp(pawn);
             if (comp == null)
             {
                 Log.Warning($"[Rimguistics] No language component found for {pawn.LabelShort}.");
@@ -24,9 +25,9 @@ namespace Rimguistics
             rect.y += Text.LineHeight + 2f;
 
             // Draw each language skill
-            foreach (var kvp in comp.languageSkills)
+            foreach (var kvp in comp.Languages)
             {
-                string info = $"{kvp.Key}: {kvp.Value:F1}";
+                string info = $"{kvp.Key}: {Math.Min(kvp.Value.Skill, 100f):F1}";
                 Widgets.Label(rect, info);
                 rect.y += Text.LineHeight;
             }

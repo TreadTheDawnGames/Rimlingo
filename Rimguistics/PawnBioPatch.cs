@@ -14,7 +14,7 @@ namespace Rimguistics
         public static void Postfix(Rect rect, Pawn pawn)
         {
             // Ensure the pawn has at least "Common" language if no other language is set
-            var comp = LangUtils.GetLanguagesComp(pawn);
+            var comp = LangUtils.GetPawnLangComp(pawn);
             if(comp == null )
             {
                 Log.Error($"[Rimguistics] LangComp for {pawn.LabelShort} was null!");

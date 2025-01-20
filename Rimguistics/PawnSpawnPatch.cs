@@ -33,7 +33,7 @@ public static class PawnSpawnPatch
             }
 
             var langComp = __instance.AllComps.OfType<Pawn_LangComp>().FirstOrDefault();
-            if (!langComp.languageSkills.Any())
+            if (!langComp.Languages.Any())
             {
 
                 try

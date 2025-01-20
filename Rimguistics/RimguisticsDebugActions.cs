@@ -61,7 +61,7 @@ namespace AdventOfCode
         }
 
         [DebugAction("Rimguistics", "Learn first lang from AllLangs (using pawn intelligence)", allowedGameStates = AllowedGameStates.PlayingOnMap, actionType = DebugActionType.ToolMapForPawns)]
-        public static void LearnLanguage(Pawn pawn)
+        public static void LearnFirstLanguage(Pawn pawn)
         {
             
             var lang = LangUtils.AllLangs.First();
@@ -72,12 +72,20 @@ namespace AdventOfCode
                 Log.Message($"[Rimguistics] {pawn.LabelShort} cannot learn a language.");
                     return;
                 }
-                LangUtils.AlterLanguageSkill(pawn, lang.LangName, LangUtils.GetPawnIntelligence(pawn));
+                LangUtils.AlterLanguageSkill(pawn, lang.LangName, LangUtils.GetPawnLearningFactor(pawn));
                 DebugActionsUtility.DustPuffFrom(pawn);
-                Log.Message($"{pawn.LabelShort} now knows {lang} with score {LangUtils.GetLanguageSkill(pawn, lang.LangName)}");
+                Log.Message($"{pawn.LabelShort} now knows {lang.LangName} with score {LangUtils.GetLanguageSkill(pawn, lang.LangName)}");
             
 
 
+        }
+        
+        
+        [DebugAction("Rimguistics", "Unlearn + Learn All/First Lang(s)", allowedGameStates = AllowedGameStates.PlayingOnMap, actionType = DebugActionType.ToolMapForPawns)]
+        public static void LearnLanguage(Pawn pawn)
+        {
+            UnlearnLanguages(pawn);
+            LearnFirstLanguage(pawn);
         }
 
         [DebugOutput(category = "Rimguistics", name = "List all Languages", onlyWhenPlaying = false)]
@@ -86,6 +94,27 @@ namespace AdventOfCode
             foreach (var lang in LangUtils.AllLangs)
             {
                 Log.Message(lang.ToString());
+            }
+        }
+
+        [DebugAction("Rimguistics", "List all pawn's languages", allowedGameStates = AllowedGameStates.PlayingOnMap, actionType = DebugActionType.ToolMapForPawns)]
+        public static void ListPawnLangs(Pawn pawn)
+        {
+            if (pawn.RaceProps.Humanlike)
+            {
+
+                Log.Message(pawn.LabelShort + ": ");
+                if (LangUtils.GetPawnLangComp(pawn).Languages.Any())
+                    foreach (var lang in LangUtils.GetPawnLangComp(pawn).Languages)
+                    {
+                        Log.Message(lang.Value.ToString());
+                    }
+                else
+                    if (!pawn.IsWildMan())
+                    Log.Warning("No languages!");
+                else
+                    Log.Message("No languages.");
+                Log.TryOpenLogWindow();
             }
         }
 

@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Linq;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace Rimguistics
 {
@@ -38,15 +40,15 @@ namespace Rimguistics
             }
 
             // Attempt best language
-            string chosenLanguage = LangUtils.DetermineBestLanguage(initiatingPawn, recipient);
+            string chosenLanguage = LangUtils.GetBestLanguageName(initiatingPawn, recipient);
             if (string.IsNullOrEmpty(chosenLanguage))
             {
                 DoLangLearningForNoSharedLangs(recipient, initiatingPawn);
 
-                //if no common language is found the interaction fails and original code is skipped. Will have to test to make sure it doesn't break.
-                Log.Message($"[Rimguistics] Interaction failed between {initiatingPawn} and {recipient}. No shared language.");
-                MoteMaker.MakeInteractionBubble(initiatingPawn, recipient, LangInteractionsDefOf.LanguageInteractionFail.interactionMote, LangInteractionsDefOf.LanguageInteractionFail.GetSymbol(initiatingPawn.Faction, initiatingPawn.Ideo), LangInteractionsDefOf.LanguageInteractionFail.GetSymbolColor(initiatingPawn.Faction));
+                LogFailedInteractionInSocialWindowLog(initiatingPawn, recipient);
 
+                Log.Message($"[Rimguistics] Interaction failed between {initiatingPawn} and {recipient}. No shared language.");
+                
                 //the interaction succeeded according to the game (if it doesn't it throws an error)
                 __result = true;
                 //return false to skip default code; the interaction failed because the pawns were unable to communicate.
@@ -55,27 +57,29 @@ namespace Rimguistics
 
             Log.Message($"[Rimguistics] \"{chosenLanguage}\" was chosen for the interaction.");
 
+
             //if Common is the only language, no benefits happen. Skip to default code.
             if (chosenLanguage == "Common")
             {
                 Log.Message($"[Rimguistics] Interaction took place between {initiatingPawn} and {recipient} in Common.");
+                //Pawns can learn common
+                DoLearning(recipient, chosenLanguage);
+                DoLearning(initiatingPawn, chosenLanguage);
+
                 //return true to run default code.
                 __result = true;
                 return true; 
             }
-
 
             //otherwise give special effect.
 
             float lowerSkill = Math.Min(LangUtils.GetLanguageSkill(recipient, chosenLanguage), LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguage));
             bool initiatorSkillTooLow = LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguage) < LangUtils.GetLanguageSkill(recipient, chosenLanguage);
 
-            // Non-common => good thoughts & skill gain
             DoLanguageThoughts(recipient, initiatingPawn, chosenLanguage);
-
-            DoLearning(recipient, initiatingPawn, chosenLanguage);
-
-
+            
+            DoLearning(initiatingPawn, chosenLanguage);
+            DoLearning(recipient, chosenLanguage);
 
             //Log pawns from different factions interacted.
             if (initiatingPawn.def == recipient.def && initiatingPawn.Faction != recipient.Faction)
@@ -89,30 +93,48 @@ namespace Rimguistics
                 Log.Message($"[Rimguistics] Interaction tried to take place between {initiatingPawn} and {recipient} in {chosenLanguage}, but {tooLowPawn}'s skill was too low! ({lowerSkill})");
                 //the interaction succeeded according to the game (if it doesn't it throws an error)
                 __result = true;
-                MoteMaker.MakeInteractionBubble(initiatingPawn, recipient, LangInteractionsDefOf.LanguageInteractionFail.interactionMote, LangInteractionsDefOf.LanguageInteractionFail.GetSymbol(initiatingPawn.Faction, initiatingPawn.Ideo), LangInteractionsDefOf.LanguageInteractionFail.GetSymbolColor(initiatingPawn.Faction));
+
+                LogFailedInteractionInSocialWindowLog(initiatingPawn, recipient);
+                
                 //return false to skip default code
                 return false;
             }
             //Log interaction.
             Log.Message($"[Rimguistics] Interaction took place between {initiatingPawn} and {recipient} in {chosenLanguage}. Skill: {lowerSkill}");
 
-
-
             __result = true;
             return true; //return true to run default code
         }
 
         /// <summary>
-        /// Performs the logic to apply language thoughts to <paramref name="initiatingPawn"/> and <paramref name="recipient"/> based on the lower of the pawns' skill in <paramref name="chosenLanguage"/>.
+        /// Performs the logic to show an interaction bubble and log the event to the social log of the involved pawns.
+        /// </summary>
+        /// <param name="initiatingPawn"></param>
+        /// <param name="recipient"></param>
+        static void LogFailedInteractionInSocialWindowLog(Pawn initiatingPawn, Pawn recipient)
+        {
+            MoteMaker.MakeInteractionBubble(initiatingPawn, recipient, LangInteractionsDefOf.LanguageInteractionFail.interactionMote, LangInteractionsDefOf.LanguageInteractionFail.GetSymbol(initiatingPawn.Faction, initiatingPawn.Ideo), LangInteractionsDefOf.LanguageInteractionFail.GetSymbolColor(initiatingPawn.Faction));
+
+            List<RulePackDef> list = new List<RulePackDef>();
+            if (recipient.interactions.CheckSocialFightStart(LangInteractionsDefOf.LanguageInteractionFail, initiatingPawn))
+            {
+                list.Add(RulePackDefOf.Sentence_SocialFightStarted);
+            }
+            PlayLogEntry_Interaction playLogEntry_Interaction = new PlayLogEntry_Interaction(LangInteractionsDefOf.LanguageInteractionFail, initiatingPawn, recipient, list);
+            Find.PlayLog.Add(playLogEntry_Interaction);
+        }
+
+        /// <summary>
+        /// Performs the logic to apply language thoughts to <paramref name="initiatingPawn"/> and <paramref name="recipient"/> based on the lower of the pawns' skill in <paramref name="chosenLanguageName"/>.
         /// </summary>
         /// <param name="recipient"></param>
         /// <param name="initiatingPawn"></param>
-        /// <param name="chosenLanguage"></param>
-        private static void DoLanguageThoughts(Pawn recipient, Pawn initiatingPawn, string chosenLanguage)
+        /// <param name="chosenLanguageName"></param>
+        private static void DoLanguageThoughts(Pawn recipient, Pawn initiatingPawn, string chosenLanguageName)
         {
             //TODO: Make buffs only happen when speaking to a pawn not of initiator's faction.
 
-            float lowerSkill = Math.Min(LangUtils.GetLanguageSkill(recipient, chosenLanguage), LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguage));
+            float lowerSkill = Math.Min(LangUtils.GetLanguageSkill(recipient, chosenLanguageName), LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguageName));
             //Get langThought scaled with the lower score of the interacting pawns.
             var langThought = LangUtils.GetLangThoughtBasedOnFloat(lowerSkill);
 
@@ -121,19 +143,50 @@ namespace Rimguistics
 
         }
 
-        private static void DoLearning(Pawn recipient, Pawn initiatingPawn, string chosenLanguage)
+        /// <summary>
+        /// Performs the logic to increase the involved pawns' skill in <paramref name="chosenLanguage"/>
+        /// </summary>
+        /// <param name="recipient"></param>
+        /// <param name="initiatingPawn"></param>
+        /// <param name="chosenLanguage"></param>
+        private static void DoLearning(Pawn learner, string chosenLanguage)
         {
-            //TODO: Balance language learning so it's not done overnight. Need a formula... maybe something like LanguageSkill += Intelligence/20 min 1.
             //TODO: Unlearn languages that aren't being used.
             //TODO: only learn if the other pawn is better at the language than the other
 
-            int intA = LangUtils.GetPawnIntelligence(initiatingPawn);
-            int intB = LangUtils.GetPawnIntelligence(recipient);
+            var langComp = LangUtils.GetPawnLangComp(learner);
+
+            float learnFactor = LangUtils.GetPawnLearningFactor(learner);
             //If pawn is smarter than 0, increase langScore.
-            if (intA > 0)
-                LangUtils.AlterLanguageSkill(initiatingPawn, chosenLanguage, intA);
-            if (intB > 0)
-                LangUtils.AlterLanguageSkill(recipient, chosenLanguage, intB);
+            if (learnFactor > 0)
+            {
+                LangUtils.AlterLanguageSkill(learner, chosenLanguage, learnFactor);
+            }
+
+            //Deteriorate each language not used
+            foreach (var lang in langComp.Languages)
+            {
+                if (lang.Key == chosenLanguage)
+                    continue;
+
+                else
+                {
+                    switch (LangUtils.GetPawnLangComp(learner).Languages[lang.Key].Fluency)
+                    {
+                        case LangDef.FluencyState.Native:
+                            LangUtils.AlterLanguageSkill(learner, lang.Key, -(learnFactor / 16));
+                            break;
+                        case LangDef.FluencyState.Fluent:
+                            LangUtils.AlterLanguageSkill(learner, lang.Key, -(learnFactor / 8));
+                            break;
+                        case LangDef.FluencyState.Foreign:
+                            LangUtils.AlterLanguageSkill(learner, lang.Key, -(learnFactor / 4));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -145,13 +198,13 @@ namespace Rimguistics
         {
             Log.Message($"[Rimguistics] Teaching each pawn the other's most prominent with score 0.");
 
-            var recLangComp = LangUtils.GetLanguagesComp(recipient);
-            var initLangComp = LangUtils.GetLanguagesComp(initiatingPawn);
+            var recLangComp = LangUtils.GetPawnLangComp(recipient);
+            var initLangComp = LangUtils.GetPawnLangComp(initiatingPawn);
 
-            var recLangs = recLangComp.languageSkills.Keys.ToList();
+            var recLangs = recLangComp.Languages.Keys.ToList();
             recLangs.Sort();
 
-            var initLangs = initLangComp.languageSkills.Keys.ToList();
+            var initLangs = initLangComp.Languages.Keys.ToList();
             initLangs.Sort();
 
             var bestLangOfReceiver = recLangs.FirstOrDefault();

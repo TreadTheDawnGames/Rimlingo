@@ -6,23 +6,31 @@ namespace Rimguistics
     public class Pawn_LangComp : ThingComp
     {
         // Key = "German", "French", etc. Value = skill [0..100]
-        public Dictionary<string, float> languageSkills = new Dictionary<string, float>();
+        public Dictionary<string, LangDef> Languages = new Dictionary<string, LangDef>();
 
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_Collections.Look(ref languageSkills, "languageSkills", LookMode.Value, LookMode.Value);
+            Scribe_Collections.Look(ref Languages, "languageSkills", LookMode.Value, LookMode.Value);
         }
 
         public float GetLanguageSkill(string languageDefName)
         {
-            //always learn at least 1% so pawns can learn even if pawn has 0 int 
-            return languageSkills.TryGetValue(languageDefName, out float skill) ? skill : 1f;
+            return Languages.TryGetValue(languageDefName, out LangDef lang) ? lang.Skill : 0f;
         }
 
-        public void SetLanguageSkill(string languageDefName, float value)
+        public void SetLanguageSkill(string langName, float value)
         {
-            languageSkills[languageDefName] = value;
+            if (!Languages.ContainsKey(langName))
+            {
+                Languages.Add(langName, new LangDef(langName, value));
+                Languages[langName].SetSkill(value);
+            }
+            else
+            {
+                Languages[langName].SetSkill(value);
+            }
         }
+        
     }
 }

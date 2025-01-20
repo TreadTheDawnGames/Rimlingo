@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
   <name>Rimguistics</name>
-  <author>CoolNether123, TreadTheDawnGames, ZManJim</author>
+  <author>TreadTheDawnGames, CoolNether123</author>
   <supportedVersions>
     <li>1.5</li>
   </supportedVersions>
-  <packageId>CoolNether123.Rimguistics</packageId>
+  <packageId>TreadTheDawnGames.Rimguistics</packageId>
   <description>
     Rimguistics introduces a dynamic language system to RimWorld. Pawns can speak one to three languages: their native tongue and up to two additional foreign languages, with Common being the most prevalent.
     
@@ -13,7 +13,7 @@
 
     When pawns interact without a common language, they can learn bits of the other pawn's language based on Intelligence, increasing their language score (LS). Over time, pawns may learn additional languages beyond their initial set.
   </description>
-  <url>https://github.com/CoolNether123/Rimlingo</url>
+  <url>https://github.com/TreadTheDawnGames/Rimguistics</url>
 
   <modDependencies>
     <li>

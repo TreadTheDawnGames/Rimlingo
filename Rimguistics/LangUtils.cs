@@ -21,7 +21,7 @@ namespace Rimguistics
         /// </summary>
         /// <param name="pawn"></param>
         /// <returns></returns>
-        public static Pawn_LangComp GetLanguagesComp(Pawn pawn)
+        public static Pawn_LangComp GetPawnLangComp(Pawn pawn)
         {
             return pawn?.TryGetComp<Pawn_LangComp>();
         }
@@ -32,37 +32,38 @@ namespace Rimguistics
         /// <param name="pawn"></param>
         /// <param name="langDefName"></param>
         /// <returns></returns>
+       /* public static float GetLanguageSkill(Pawn pawn, string langDefName)
+        {
+            Log.Message("Getting Language Skill");
+            return GetPawnLangComp(pawn)?.GetLanguageSkill(langDefName) ?? 0f;
+        }*/
+        
         public static float GetLanguageSkill(Pawn pawn, string langDefName)
         {
             Log.Message("Getting Language Skill");
-            return GetLanguagesComp(pawn)?.GetLanguageSkill(langDefName) ?? 0f;
-        }
-        
-        public static float GetLanguageSkill(Pawn pawn, LangDef langDefName)
-        {
-            Log.Message("Getting Language Skill");
-            return GetLanguagesComp(pawn)?.GetLanguageSkill(langDefName.LangName) ?? 0f;
+            return GetPawnLangComp(pawn)?.GetLanguageSkill(langDefName) ?? 0f;
         }
 
         /// <summary>
-        /// Changes <paramref name="pawn"/>'s <paramref name="langDefName"/> knowledge score by <paramref name="amount"/>, capped at 100.
+        /// Changes <paramref name="pawn"/>'s <paramref name="langDefName"/> knowledge score by <paramref name="amount"/>, capped at 500.
         /// </summary>
         /// <param name="pawn"></param>
         /// <param name="langDefName"></param>
         /// <param name="amount"></param>
         public static void AlterLanguageSkill(Pawn pawn, string langDefName, float amount)
         {
-            var comp = GetLanguagesComp(pawn);
+            var comp = GetPawnLangComp(pawn);
             if (comp == null)
             {
                 Log.Error($"{pawn.LabelShort} has no LangComp! Cannot alter {langDefName} skill.");
                 return;
             }
             float current = comp.GetLanguageSkill(langDefName);
-            float newVal = Math.Min(current + amount, 100f);
+            float newVal = Math.Min(current + amount, 5000f);
+
             comp.SetLanguageSkill(langDefName, newVal);
 
-            Log.Message($"[Rimguistics] {pawn.LabelShort} gained {amount:F1} in {langDefName}, now {newVal:F1}.");
+            Log.Message($"[Rimguistics] {pawn.LabelShort} gained {amount} in {langDefName}, now {newVal}.");
         }
 
         /// <summary>
@@ -75,6 +76,43 @@ namespace Rimguistics
             var skill = pawn?.skills?.GetSkill(SkillDefOf.Intellectual);
             return skill?.Level ?? 0;
         }
+        
+        public static int GetPawnSocial(Pawn pawn)
+        {
+            var skill = pawn?.skills?.GetSkill(SkillDefOf.Social);
+            return skill?.Level ?? 0;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pawn"></param>
+        /// <param name="debug"></param>
+        /// <returns></returns>
+        public static float GetPawnLearningFactor(Pawn pawn, bool debug = false)
+        {
+            
+
+            //MaybeRebalance: Balance language learning so it's not done overnight. Need a formula... maybe something like LanguageSkill += Intelligence/20 min 1.
+            
+            float intelligence = GetPawnIntelligence(pawn);
+            float social = GetPawnSocial(pawn);
+
+            //minimum learn is always 0.08666667..., max is 2.
+            var intPassion = (int)pawn.skills.GetSkill(SkillDefOf.Intellectual).passion;
+            var socPassion = (int)pawn.skills.GetSkill(SkillDefOf.Social).passion;
+            double factor = ((Math.Max(social, 1f) / 15f ) + (Math.Max(intelligence, 1f) /5f) / (10f - intPassion - socPassion));
+
+
+            if(debug)
+            {
+                intelligence = intelligence > 0 ? intelligence : 10;
+            }
+
+            return debug ? intelligence : (float)factor;
+
+
+        }
 
         /// <summary>
         /// Determines the best mutual language between <paramref name="initiator"/> and <paramref name="recipient"/>, prioritizing non-common languages.
@@ -82,10 +120,10 @@ namespace Rimguistics
         /// <param name="initiator"></param>
         /// <param name="recipient"></param>
         /// <returns></returns>
-        public static string DetermineBestLanguage(Pawn initiator, Pawn recipient)
+        public static string GetBestLanguageName(Pawn initiator, Pawn recipient)
         {
-            var compA = GetLanguagesComp(initiator);
-            var compB = GetLanguagesComp(recipient);
+            var compA = GetPawnLangComp(initiator);
+            var compB = GetPawnLangComp(recipient);
             if (compA == null || compB == null)
             {
                 string debugA = compA == null ? "null" : compA.ToString();
@@ -93,8 +131,8 @@ namespace Rimguistics
                 Log.Error($"[Rimguistics] {initiator.LabelShort}'s language component was {debugA} and {recipient.LabelShort}'s was {debugB}.");
                 return null;
             }
-            var languagesA = compA.languageSkills.Where(kv => kv.Value >=0f).Select(kv => kv.Key).ToList();
-            var languagesB = compB.languageSkills.Where(kv => kv.Value >=0f).Select(kv => kv.Key).ToList();
+            var languagesA = compA.Languages.Where(kv => kv.Value.Skill >=0f).Select(kv => kv.Key).ToList();
+            var languagesB = compB.Languages.Where(kv => kv.Value.Skill >=0f).Select(kv => kv.Key).ToList();
 
            /* Debug list for pawn languages
             * Log.Message("Langs A");
@@ -158,7 +196,7 @@ namespace Rimguistics
         /// <returns></returns>
         public static bool PawnKnowsLanguage(Pawn pawn, string langDef)
         {
-            return GetLanguagesComp(pawn).GetLanguageSkill(langDef) > 0;
+            return GetPawnLangComp(pawn).GetLanguageSkill(langDef) > 0;
         }
 
         
@@ -291,7 +329,7 @@ namespace Rimguistics
             try
             {
 
-                GetLanguagesComp(pawn).languageSkills.Remove(lang.LangName);
+                GetPawnLangComp(pawn).Languages.Remove(lang.LangName);
             }
             catch
             {
