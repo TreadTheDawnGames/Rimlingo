@@ -74,3 +74,8 @@ crashlytics-build.properties
 
 #build.force
 Rimguistics/obj/Debug/build.force
+
+#Cache etc
+Rimguistics/obj/Debug/Rimguistics.csproj.AssemblyReference.cache
+Rimguistics/obj/Rimguistics.csproj.nuget.dgspec.json
+Rimguistics/obj/project.assets.json
