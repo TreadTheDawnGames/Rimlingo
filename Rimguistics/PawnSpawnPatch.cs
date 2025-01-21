@@ -39,9 +39,9 @@ public static class PawnSpawnPatch
                 try
                 {
                     Log.Message($"[Rimguistics] {__instance.LabelShort} is learning a language...");
-
+                    
                     string lang = LangUtils.AllLangs?.Where(l => __instance.Faction == l.BelongingFaction)?.FirstOrDefault()?.LangName ?? "Common";
-                    langComp.SetLanguageSkill(lang, 100f);
+                    langComp.SetLanguageSkill(lang, 500f);
                     // comp.SetLanguageSkill("Common", 1f); // Default to "Common" with a skill level of 1
                     Log.Message($"[Rimguistics] Assigned language \"{lang}\" to {__instance.LabelShort}.");
                 }
