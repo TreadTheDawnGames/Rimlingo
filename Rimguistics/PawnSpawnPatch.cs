@@ -38,12 +38,36 @@ public static class PawnSpawnPatch
 
                 try
                 {
-                    Log.Message($"[Rimguistics] {__instance.LabelShort} is learning a language...");
+                    int iPass = (int)__instance.skills.GetSkill(SkillDefOf.Intellectual).passion;
+                    int sPass = (int)__instance.skills.GetSkill(SkillDefOf.Social).passion;
+                    int maxLangs = 1 + iPass + sPass;
+                    int additionalLangs = Rand.Range(1, maxLangs);
+
+                    string useS = additionalLangs > 0 ? "s" : "";
+                    Log.Message($"[Rimguistics] {__instance.LabelShort} is learning {additionalLangs + 1} language{useS}...");
                     
-                    string lang = LangUtils.AllLangs?.Where(l => __instance.Faction == l.BelongingFaction)?.FirstOrDefault()?.LangName ?? "Common";
-                    langComp.SetLanguageSkill(lang, 500f);
+                    string nativeLang = LangUtils.AllLangs?.Where(l => __instance.Faction == l.BelongingFaction)?.FirstOrDefault()?.LangName ?? "Common";
+                    langComp.SetLanguageSkill(nativeLang, 500f);
+
+                    for (int i = additionalLangs; i > 0; i--)
+                    {
+                        int maxVal = LangUtils.AllLangs.Count - 1;
+
+                        LangDef[] knownLangs = langComp.Languages.Values.ToArray();
+                        maxVal = maxVal < 0 ? 0 : maxVal;
+                        string learningLang = LangUtils.AllLangs?.Where(l => !knownLangs.Contains(l) && l.BelongingFaction != Find.FactionManager.OfAncients).ToList()[Rand.Range(0,maxVal)].LangName;
+                        langComp.SetLanguageSkill(learningLang, Rand.Range(0, 300));
+                    }
+
+                        Log.Message($"[Rimguistics]  {__instance.LabelShort}'s Languages:.");
+                    foreach(var l in langComp.Languages.Values)
+                    {
+                        Log.Message(l.ToString());
+                    }
+
+                    if (!langComp.Languages.Values.Any()) Log.Error("[Rimguistics] No langs were assigned to " + __instance.LabelShort);
+
                     // comp.SetLanguageSkill("Common", 1f); // Default to "Common" with a skill level of 1
-                    Log.Message($"[Rimguistics] Assigned language \"{lang}\" to {__instance.LabelShort}.");
                 }
 
                 catch (Exception ex)

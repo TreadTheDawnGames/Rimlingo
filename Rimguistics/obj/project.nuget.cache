@@ -1,13 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Y0xuKzvg2cPNL/0+nwXFYeUkwtJ73CFQVwajfSb1vPCGVH0L9oVavJicrha2bPk3qzR30zEhzz67FG5D5x545Q==",
+  "dgSpecHash": "YkF8SzMFm7YtAEv2OKkMYFFda2uK2KGVfgcUaUqPRTIKpmqZKqkP3nTl4FFLfopyPnlSF/Wae9aFGMyETV5tkA==",
   "success": true,
   "projectFilePath": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimguistics\\Rimguistics\\Rimguistics.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\CASPI\\.nuget\\packages\\krafs.publicizer\\2.3.0\\krafs.publicizer.2.3.0.nupkg.sha512",
     "C:\\Users\\CASPI\\.nuget\\packages\\krafs.rimworld.ref\\1.5.4297\\krafs.rimworld.ref.1.5.4297.nupkg.sha512",
-    "C:\\Users\\CASPI\\.nuget\\packages\\lib.harmony\\2.3.3\\lib.harmony.2.3.3.nupkg.sha512",
-    "C:\\Users\\CASPI\\.nuget\\packages\\rimworld.multiplayerapi\\0.5.0\\rimworld.multiplayerapi.0.5.0.nupkg.sha512"
+    "C:\\Users\\CASPI\\.nuget\\packages\\lib.harmony\\2.3.3\\lib.harmony.2.3.3.nupkg.sha512"
   ],
   "logs": []
 }
