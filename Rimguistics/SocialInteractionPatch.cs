@@ -143,13 +143,12 @@ namespace Rimguistics
 
         private static void DoLearningPair(Pawn initiator, Pawn receiver, string chosenLanguage)
         {
-
             float initSkill = LangUtils.GetLanguageSkill(initiator, chosenLanguage);
             float recSkill = LangUtils.GetLanguageSkill(receiver, chosenLanguage);
 
             if(initSkill > recSkill)
                 DoLearning(receiver, chosenLanguage, initSkill);
-            else if (initSkill > recSkill)
+            else if (initSkill < recSkill)
                 DoLearning(initiator, chosenLanguage, recSkill);
 
         }
