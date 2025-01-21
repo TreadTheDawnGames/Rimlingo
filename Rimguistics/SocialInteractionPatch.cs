@@ -147,10 +147,16 @@ namespace Rimguistics
             float initSkill = LangUtils.GetLanguageSkill(initiator, chosenLanguage);
             float recSkill = LangUtils.GetLanguageSkill(receiver, chosenLanguage);
 
-            if(initSkill > recSkill)
+            if (initSkill > recSkill)
+            {
                 DoLearning(receiver, chosenLanguage, initSkill);
+                Log.Message(receiver.LabelShort + " learned " + LangUtils.GetPawnLearningFactor(receiver) + " in " + chosenLanguage);
+            }
             else if (initSkill > recSkill)
+            {
                 DoLearning(initiator, chosenLanguage, recSkill);
+                Log.Message(initiator.LabelShort + " learned " + LangUtils.GetPawnLearningFactor(initiator) + " in " + chosenLanguage);
+            }
 
         }
 
@@ -169,7 +175,6 @@ namespace Rimguistics
 
             float learnFactor = LangUtils.GetPawnLearningFactor(learner);
 
-            
 
             //If pawn is smarter than 0, increase langScore.
             if (learnFactor > 0)
