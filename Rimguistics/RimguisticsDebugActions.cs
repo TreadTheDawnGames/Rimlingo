@@ -120,6 +120,15 @@ namespace AdventOfCode
             }
         }
         
+        [DebugAction("Rimguistics", "Pawn Learning Factor", allowedGameStates = AllowedGameStates.PlayingOnMap, actionType = DebugActionType.ToolMapForPawns)]
+        public static void ListLearningFactor(Pawn pawn)
+        {
+            if (pawn.RaceProps.Humanlike)
+            {
+                Log.Message(pawn.LabelShort + ": " + LangUtils.GetPawnLearningFactor(pawn));
+            }
+        }
+        
         [DebugAction("Rimguistics", "Unlearn best language (10)", allowedGameStates = AllowedGameStates.PlayingOnMap, actionType = DebugActionType.ToolMapForPawns)]
         public static void UnlearnLanguage(Pawn pawn)
         {
