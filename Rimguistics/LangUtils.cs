@@ -353,4 +353,13 @@ namespace Rimguistics
             }
         }
     }
+
+    public class LangComparer_Skill : IComparer<LangDef>
+    {
+        public int Compare(LangDef x, LangDef y)
+        {
+            return x.Skill > y.Skill ? 1 : 0 ;
+        }
+    }
+
 }

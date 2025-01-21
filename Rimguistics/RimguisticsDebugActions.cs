@@ -91,14 +91,13 @@ namespace AdventOfCode
         [DebugOutput(category = "Rimguistics", name = "List all Languages", onlyWhenPlaying = false)]
         public static void ListAllLangs()
         {
-            Log.openOnMessage = true;
             if (!LangUtils.AllLangs.Any())
                 Log.Error("[Rimguistics] No langs in AllLangs!");
             foreach (var lang in LangUtils.AllLangs)
             {
                 Log.Message(lang.ToString());
             }
-            Log.openOnMessage = false;
+            Log.TryOpenLogWindow();
         }
 
         [DebugAction("Rimguistics", "List all pawn's languages", allowedGameStates = AllowedGameStates.PlayingOnMap, actionType = DebugActionType.ToolMapForPawns)]
@@ -106,7 +105,6 @@ namespace AdventOfCode
         {
             if (pawn.RaceProps.Humanlike)
             {
-
                 Log.Message(pawn.LabelShort + ": ");
                 if (LangUtils.GetPawnLangComp(pawn).Languages.Any())
                     foreach (var lang in LangUtils.GetPawnLangComp(pawn).Languages)
@@ -119,6 +117,34 @@ namespace AdventOfCode
                 else
                     Log.Message("No languages.");
                 Log.TryOpenLogWindow();
+            }
+        }
+        
+        [DebugAction("Rimguistics", "Unlearn best language (10)", allowedGameStates = AllowedGameStates.PlayingOnMap, actionType = DebugActionType.ToolMapForPawns)]
+        public static void UnlearnLanguage(Pawn pawn)
+        {
+            if (pawn.RaceProps.Humanlike)
+            {
+                var langs = LangUtils.GetPawnLangComp(pawn).Languages;
+                if (langs.Any())
+                {
+                    var langList = langs.Values.ToList();
+                    LangDef lang = langList.MaxBy(item => item.Skill);
+
+                    if(lang!=null)
+                    {
+                        LangUtils.AlterLanguageSkill(pawn, lang.LangName, -10f);
+                        DebugActionsUtility.DustPuffFrom(pawn);
+                    }
+                    else
+                    {
+                        Log.Error("[Rimguistics] Unable to decrease "+lang.LangName+" skill");
+                    }
+                }
+                else if (!pawn.IsWildMan())
+                    Log.Warning("No languages!");
+                else
+                    Log.Message("No languages.");
             }
         }
 
