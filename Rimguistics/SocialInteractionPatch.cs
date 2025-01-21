@@ -7,6 +7,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Rimguistics
 {
@@ -146,8 +147,11 @@ namespace Rimguistics
             float initSkill = LangUtils.GetLanguageSkill(initiator, chosenLanguage);
             float recSkill = LangUtils.GetLanguageSkill(receiver, chosenLanguage);
 
-            DoLearning(initiator, chosenLanguage, recSkill);
-            DoLearning(receiver, chosenLanguage, initSkill);
+            if(initSkill > recSkill)
+                DoLearning(receiver, chosenLanguage, initSkill);
+            else if (initSkill > recSkill)
+                DoLearning(initiator, chosenLanguage, recSkill);
+
         }
 
 
@@ -171,16 +175,16 @@ namespace Rimguistics
             if (learnFactor > 0)
             {
                 //TODO: only learn if the other pawn is better at the language than the other
-/*
+
                 if (maxCanLearn >= 0)
                 {
-                    if(skill + learnFactor > maxCanLearn)
+                    if (skill + learnFactor > maxCanLearn)
                     {
-                            float newSkill = maxCanLearn - skill;
-                        learnFactor = newSkill > 0 ? newSkill : learnFactor;
+                        float maxLearn = (maxCanLearn - skill);
+                        learnFactor = maxLearn;
                     }
 
-                }*/
+                }
 
                 LangUtils.AlterLanguageSkill(learner, chosenLanguage, learnFactor);
             }
