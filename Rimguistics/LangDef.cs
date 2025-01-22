@@ -46,6 +46,8 @@ namespace Rimguistics
             
         }
 
+        
+
         public void DetermineFluency()
         {
             if (Skill < 100)

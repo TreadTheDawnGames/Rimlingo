@@ -52,7 +52,6 @@ namespace Rimguistics
         
         public static float GetLanguageSkill(Pawn pawn, string langDefName)
         {
-            Log.Message("Getting Language Skill");
             return GetPawnLangComp(pawn)?.GetLanguageSkill(langDefName) ?? 0f;
         }
 
@@ -72,11 +71,10 @@ namespace Rimguistics
             }
             float current = comp.GetLanguageSkill(langDefName);
             float newVal = Math.Min(current + amount, 5000f);
-            newVal = newVal < 0 ? 0 : newVal;
+            //newVal = newVal < 0 ? 0 : newVal;
 
-            comp.SetLanguageSkill(langDefName, newVal);
-
-            Log.Message($"[Rimguistics] {pawn.LabelShort} gained {amount} in {langDefName}, now {newVal}.");
+            if(comp.SetLanguageSkill(langDefName, newVal)) 
+                Log.Message($"[Rimguistics] {pawn.LabelShort} gained {amount} in {langDefName}, now {newVal}.");
         }
 
         /// <summary>
@@ -255,7 +253,6 @@ namespace Rimguistics
             }
 
             float langSkill = GetLanguageSkill(pawn, lang);
-            Log.Message("Finished Getting Language Skill");
 
             try
             {

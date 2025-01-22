@@ -21,7 +21,7 @@ namespace Rimguistics
             }
 
             // Title
-            Widgets.Label(rect, "Languages:");
+            Widgets.Label(rect, $"Languages ({LangUtils.GetPawnLangComp(pawn).Languages.Count}/{LangUtils.GetPawnLangComp(pawn).MaxLangs}):");
             rect.y += Text.LineHeight + 2f;
 
             // Draw each language skill

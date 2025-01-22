@@ -2,7 +2,9 @@
 using Rimguistics;
 using RimWorld;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Verse;
 using static Unity.Burst.Intrinsics.X86.Avx;
 
@@ -10,7 +12,7 @@ using static Unity.Burst.Intrinsics.X86.Avx;
 public static class PawnSpawnPatch
 {
     /// <summary>
-    /// Adds a language component to <paramref name="__instance"/>.
+    /// Adds a language component to <paramref name="__instance"/> and assigns starting languages.
     /// </summary>
     /// <param name="__instance"></param>
     /// <param name="respawningAfterLoad"></param>
@@ -35,44 +37,73 @@ public static class PawnSpawnPatch
             var langComp = __instance.AllComps.OfType<Pawn_LangComp>().FirstOrDefault();
             if (!langComp.Languages.Any())
             {
-
                 try
                 {
                     int iPass = (int)__instance.skills.GetSkill(SkillDefOf.Intellectual).passion;
                     int sPass = (int)__instance.skills.GetSkill(SkillDefOf.Social).passion;
-                    int maxLangs = 1 + iPass + sPass;
-                    int additionalLangs = Rand.Range(1, maxLangs);
+                    int maxAditionalLangs = 1 + iPass + sPass;
+                    langComp.SetMaxLangs(maxAditionalLangs + 1);
 
-                    string useS = additionalLangs > 0 ? "s" : "";
+                    int additionalLangs = maxAditionalLangs;//Rand.Range(0, maxAditionalLangs);
+                    string useS = additionalLangs >= 0 ? "s" : "";
                     Log.Message($"[Rimguistics] {__instance.LabelShort} is learning {additionalLangs + 1} language{useS}...");
                     
                     string nativeLang = LangUtils.AllLangs?.Where(l => __instance.Faction == l.BelongingFaction)?.FirstOrDefault()?.LangName ?? "Common";
                     langComp.SetLanguageSkill(nativeLang, 500f);
 
+
+
                     for (int i = additionalLangs; i > 0; i--)
                     {
-                        int maxVal = LangUtils.AllLangs.Count - 1;
 
-                        LangDef[] knownLangs = langComp.Languages.Values.ToArray();
-                        maxVal = maxVal < 0 ? 0 : maxVal;
-                        string learningLang = LangUtils.AllLangs?.Where(l => !knownLangs.Contains(l) && l.BelongingFaction != Find.FactionManager.OfAncients).ToList()[Rand.Range(0,maxVal)].LangName;
+                        List<string> knownLangs = new List<string>();
+                        foreach (var availableLang in langComp.Languages.Values)
+                        {
+                            knownLangs.Add(availableLang.LangName);
+                        }
+
+                        langComp.ListKnownLangs();
+
+                        List<string> availableLangs = new List<string>();
+                        foreach(var availableLang in LangUtils.AllLangs)
+                        {
+                            availableLangs.Add(availableLang.LangName);
+                        }
+
+                        availableLangs = availableLangs.Except(knownLangs).ToList();
+
+                            //Except( knownLangs ).ToList();
+
+                        Log.Message("available langs".Colorize(Color.magenta));
+                        foreach (var thing in availableLangs)
+                        {
+                            Log.Message($"- {thing.ToString()}".Colorize(Color.magenta));
+                        }
+                        int languageCount = availableLangs.Count - 1;
+                        languageCount = languageCount < 0 ? 0 : languageCount;
+
+                        string learningLang = availableLangs[Rand.Range(0, languageCount)];
+
+                        if (knownLangs.Where(kl => kl == learningLang).Any())
+                        {
+                            Log.Error($"[Rimguistics] {learningLang} has already been chosen");
+                            continue;
+                        }
                         langComp.SetLanguageSkill(learningLang, Rand.Range(0, 300));
                     }
 
-                        Log.Message($"[Rimguistics]  {__instance.LabelShort}'s Languages:.");
-                    foreach(var l in langComp.Languages.Values)
-                    {
-                        Log.Message(l.ToString());
-                    }
-
                     if (!langComp.Languages.Values.Any()) Log.Error("[Rimguistics] No langs were assigned to " + __instance.LabelShort);
+
+                    if (additionalLangs == 0) Log.Message($"[Rimguistics] No additional langs were assigned to {__instance.LabelShort}".Colorize(Color.green));
+
+                    Log.Message("-------");
 
                     // comp.SetLanguageSkill("Common", 1f); // Default to "Common" with a skill level of 1
                 }
 
                 catch (Exception ex)
                 {
-                    Log.Error($"[Rimguistics] Unable to assign a language to {__instance.LabelShort}: " + ex.Message);
+                    Log.Error($"[Rimguistics] Unable to assign languages to {__instance.LabelShort}: " + ex.Message);
                 }
             }
 

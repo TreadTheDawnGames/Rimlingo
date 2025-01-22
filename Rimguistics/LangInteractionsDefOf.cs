@@ -13,6 +13,7 @@ namespace Rimguistics
     {
         public static InteractionDef LanguageInteractionSuccess;
         public static InteractionDef LanguageInteractionFail;
+        public static InteractionDef LanguageLost;
 
     }
 }

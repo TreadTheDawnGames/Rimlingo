@@ -22,9 +22,25 @@
     <recipientThought>LinguisticallyMisunderstood</recipientThought>
     <logRulesInitiator>
       <rulesStrings>
-        <li>r_logentry->[INITIATOR_nameDef] [complimented] [RECIPIENT_nameDef].</li>
+      <!-- r_logentry->[initiator] tried to [complimented] [Recipient] but failed dut to a language barrier.-->
 
-        <li>complimented(p=3)->failed to speak to</li>
+        <li>r_logentry->[INITIATOR_nameDef] [complimented] [RECIPIENT_nameDef], but failed due to a language barrier.</li>
+
+        <li>complimented(p=3)->tried to speak to</li>
+      </rulesStrings>
+    </logRulesInitiator>
+  </InteractionDef>
+  
+   <InteractionDef>
+    <defName>LanguageLost</defName>
+    <label>language lost</label>
+    <workerClass>InteractionWorker</workerClass>
+    <symbol>Things/Mote/SpeechSymbols/LinguisticInteractionLanguageLost</symbol>
+    <logRulesInitiator>
+      <rulesStrings>
+
+        <li>r_logentry->[INITIATOR_nameDef] lost the ability to speak [LOSTLANGUAGE].</li>
+
       </rulesStrings>
     </logRulesInitiator>
   </InteractionDef>

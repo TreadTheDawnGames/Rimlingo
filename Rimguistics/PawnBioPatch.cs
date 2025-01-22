@@ -1,5 +1,6 @@
 using HarmonyLib;
 using RimWorld;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace Rimguistics
     [HarmonyPatch(typeof(CharacterCardUtility), "DrawCharacterCard")]
     public static class PawnBioPatch
     {
+
         [HarmonyPostfix]
         public static void Postfix(Rect rect, Pawn pawn)
         {
@@ -39,6 +41,7 @@ namespace Rimguistics
 
             PawnBioUI.DrawLanguageSkills(languageRect, pawn);
 
+            
             // If you want to shift the rest of the vanilla UI down (so traits are below languages),
             // you'd do something more advanced: e.g., adjusting the "curY" reflection in the method.
             // But a minimal approach is just to paint over the standard location (which might overlap).

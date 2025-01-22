@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Y0xuKzvg2cPNL/0+nwXFYeUkwtJ73CFQVwajfSb1vPCGVH0L9oVavJicrha2bPk3qzR30zEhzz67FG5D5x545Q==",
+  "dgSpecHash": "EXRzJqzDQQL0bnl2A0fae/IU8QFrG/RtjJMrlCE7O8QTy8NfG3hg2TeGZqSsz3HIPfLWOHQUnsHyo8hBjZqYfQ==",
   "success": true,
   "projectFilePath": "D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimguistics\\Rimguistics\\Rimguistics.csproj",
   "expectedPackageFiles": [
@@ -9,12 +9,5 @@
     "C:\\Users\\CASPI\\.nuget\\packages\\lib.harmony\\2.3.3\\lib.harmony.2.3.3.nupkg.sha512",
     "C:\\Users\\CASPI\\.nuget\\packages\\rimworld.multiplayerapi\\0.5.0\\rimworld.multiplayerapi.0.5.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file D:\\Programs\\RimWorld1-5-4297Win64\\RimWorld1-5-4297Win64\\Mods\\Rimguistics\\Rimguistics\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }
