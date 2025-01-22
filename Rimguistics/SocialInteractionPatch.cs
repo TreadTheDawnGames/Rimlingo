@@ -58,6 +58,8 @@ namespace Rimguistics
 
             Log.Message($"[Rimguistics] \"{chosenLanguage}\" was chosen for the interaction.");
 
+            float lowerSkill = Math.Min(LangUtils.GetLanguageSkill(recipient, chosenLanguage), LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguage));
+            bool initiatorSkillTooLow = LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguage) < LangUtils.GetLanguageSkill(recipient, chosenLanguage);
 
             //if Common is the only language, no benefits happen. Skip to default code.
             if (chosenLanguage == "Common")
@@ -65,35 +67,26 @@ namespace Rimguistics
                 Log.Message($"[Rimguistics] Interaction took place between {initiatingPawn} and {recipient} in Common.");
                 //Pawns can learn common
                 DoLearningPair(initiatingPawn, recipient, chosenLanguage);
-
                 //return true to run default code.
-                __result = true;
-                return true; 
             }
-
-            //otherwise give special effect.
-
-            float lowerSkill = Math.Min(LangUtils.GetLanguageSkill(recipient, chosenLanguage), LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguage));
-            bool initiatorSkillTooLow = LangUtils.GetLanguageSkill(initiatingPawn, chosenLanguage) < LangUtils.GetLanguageSkill(recipient, chosenLanguage);
-
-            DoLanguageThoughts(recipient, initiatingPawn, chosenLanguage);
-
-            DoLearningPair(initiatingPawn, recipient, chosenLanguage);
-            //Log pawns from different factions interacted.
-            if (initiatingPawn.def == recipient.def && initiatingPawn.Faction != recipient.Faction)
+            else
             {
-                Log.Message($"[Rimguistics] {initiatingPawn.LabelShort} & {recipient.LabelShort} share species but different factions!");
+                //otherwise give special effect.
+                DoLanguageThoughts(recipient, initiatingPawn, chosenLanguage);
+                DoLearningPair(initiatingPawn, recipient, chosenLanguage);
+                //Log pawns from different factions interacted.
+                if (initiatingPawn.def == recipient.def && initiatingPawn.Faction != recipient.Faction)
+                {
+                    Log.Message($"[Rimguistics] {initiatingPawn.LabelShort} & {recipient.LabelShort} share species but different factions!");
+                }
             }
-
             if(lowerSkill < 25f)
             {
                 string tooLowPawn = initiatorSkillTooLow ? initiatingPawn.LabelShort :  recipient.LabelShort;
                 Log.Message($"[Rimguistics] Interaction tried to take place between {initiatingPawn} and {recipient} in {chosenLanguage}, but {tooLowPawn}'s skill was too low! ({lowerSkill})");
                 //the interaction succeeded according to the game (if it doesn't it throws an error)
                 __result = true;
-
                 LogFailedInteractionInSocialWindowLog(initiatingPawn, recipient);
-                
                 //return false to skip default code
                 return false;
             }

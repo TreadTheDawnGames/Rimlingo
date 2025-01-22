@@ -51,20 +51,7 @@ namespace Rimguistics
 
                 if (Languages[langName].Skill < 0)
                 {
-                    Languages.Remove(langName); 
-                    
-
-                    RulePackDef def = new RulePackDef();
-
-                    var interactionLostLang = LangInteractionsDefOf.LanguageLost;
-                    interactionLostLang.logRulesInitiator.Rules.Add(new Rule_String("LOSTLANGUAGE", langName));
-                    PlayLogEntry_LanguageLost playLogEntry = new PlayLogEntry_LanguageLost(interactionLostLang, pawn, langName);
-                    Find.PlayLog.Add(playLogEntry);
-
-                    Messages.Message($"{pawn.LabelShort} has lost the ability to speak {langName}", MessageTypeDefOf.NegativeEvent);
-
-
-                    //Log.Message(parent.LabelShort + " lost the ability to speak " + langName);
+                    LangUtils.RemoveLangFromPawn(pawn, langName);
                 }
                 return true;
             }

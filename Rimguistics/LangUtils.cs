@@ -337,16 +337,22 @@ namespace Rimguistics
 
         }
 
-        public static void RemoveLangFromPawn(Pawn pawn, LangDef lang)
+        public static void RemoveLangFromPawn(Pawn pawn, string lang)
         {
             try
             {
+                if (GetPawnLangComp(pawn).Languages.Remove(lang))
+                {
 
-                GetPawnLangComp(pawn).Languages.Remove(lang.LangName);
+                    PlayLogEntry_LanguageLost playLogEntry = new PlayLogEntry_LanguageLost(LangInteractionsDefOf.LanguageLost, pawn, lang);
+                    Find.PlayLog.Add(playLogEntry);
+                    Messages.Message($"{pawn.LabelShort} has lost the ability to speak {lang}", MessageTypeDefOf.NegativeEvent);
+                }
+
             }
             catch
             {
-                Log.Message($"[Rimguistics] Unable to remove {lang.LangName ?? "Unknown"} from {pawn.LabelShort ?? "Pawn"}.");
+                Log.Message($"[Rimguistics] Unable to remove {lang ?? "Unknown"} from {pawn.LabelShort ?? "Pawn"}.");
             }
         }
     }

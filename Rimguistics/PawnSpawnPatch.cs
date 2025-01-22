@@ -34,6 +34,12 @@ public static class PawnSpawnPatch
                 __instance.AllComps.Add(comp);
             }
 
+            if (__instance.IsWildMan())
+            {
+                Log.Message("[Rimguistics] Not adding languages to wild man " + __instance.LabelShort);
+                return;
+            }
+
             var langComp = __instance.AllComps.OfType<Pawn_LangComp>().FirstOrDefault();
             if (!langComp.Languages.Any())
             {
@@ -44,7 +50,7 @@ public static class PawnSpawnPatch
                     int maxAditionalLangs = 1 + iPass + sPass;
                     langComp.SetMaxLangs(maxAditionalLangs + 1);
 
-                    int additionalLangs = maxAditionalLangs;//Rand.Range(0, maxAditionalLangs);
+                    int additionalLangs = maxAditionalLangs;// Rand.Range(0, maxAditionalLangs);
                     string useS = additionalLangs >= 0 ? "s" : "";
                     Log.Message($"[Rimguistics] {__instance.LabelShort} is learning {additionalLangs + 1} language{useS}...");
                     
@@ -89,7 +95,7 @@ public static class PawnSpawnPatch
                             Log.Error($"[Rimguistics] {learningLang} has already been chosen");
                             continue;
                         }
-                        langComp.SetLanguageSkill(learningLang, Rand.Range(0, 300));
+                        langComp.SetLanguageSkill(learningLang, DetermineStartingKnowledge(__instance.skills.GetSkill(SkillDefOf.Intellectual).Level, __instance.skills.GetSkill(SkillDefOf.Social).Level));
                     }
 
                     if (!langComp.Languages.Values.Any()) Log.Error("[Rimguistics] No langs were assigned to " + __instance.LabelShort);
@@ -106,9 +112,17 @@ public static class PawnSpawnPatch
                     Log.Error($"[Rimguistics] Unable to assign languages to {__instance.LabelShort}: " + ex.Message);
                 }
             }
-
-
         }
     }
+
+    static float DetermineStartingKnowledge(float intSkill, float socSkill)
+    {
+        Log.Message(intSkill +" "+ socSkill);
+        float maxKnow = Math.Max(intSkill, 1) + Math.Max(socSkill, 1) * 15;
+        float knowledge = Rand.Range(5, maxKnow);
+
+        return knowledge;
+    }
+
 }
 

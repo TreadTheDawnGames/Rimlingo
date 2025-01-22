@@ -54,7 +54,7 @@ namespace AdventOfCode
                 return;
 
             foreach(var lang in LangUtils.AllLangs)
-                LangUtils.RemoveLangFromPawn(pawn, lang);
+                LangUtils.RemoveLangFromPawn(pawn, lang.LangName);
 
             DebugActionsUtility.DustPuffFrom(pawn);
 
