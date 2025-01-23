@@ -11,18 +11,21 @@ namespace Rimguistics
     public class RimguisticsSettings : ModSettings
     {
        public bool showFullLangKnowledge = false;
+        public bool useDebugValues = false;
 
         public override void ExposeData()
         {
             base.ExposeData();
 
             Scribe_Values.Look(ref showFullLangKnowledge, "showFullLangKnowledge", true);
+            Scribe_Values.Look(ref useDebugValues, "useDebugValues", true);
             //Look(ref showFullLangKnowledge, "showFullLangKnowledge");
 
         }
         public void ResetToDefaults()
         {
             showFullLangKnowledge = false;
+            useDebugValues = false;
         }
     }
 
@@ -61,8 +64,9 @@ namespace Rimguistics
                 Settings.ResetToDefaults();
             }
             listingStandard.Gap(20f);
-
             listingStandard.CheckboxLabeled("- Show Full Language Knowledge", ref Settings.showFullLangKnowledge);
+            listingStandard.Gap(20f);
+            listingStandard.CheckboxLabeled("- Use Debug Values", ref Settings.useDebugValues);
 
             listingStandard.End();
         }

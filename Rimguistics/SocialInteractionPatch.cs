@@ -161,13 +161,11 @@ namespace Rimguistics
 
             float learnFactor = LangUtils.GetPawnLearningFactor(learner);
 
-            
+
 
             //If pawn is smarter than 0, increase langScore.
             if (learnFactor > 0)
             {
-                //TODO: only learn if the other pawn is better at the language than the other
-
                 if (maxCanLearn >= 0)
                 {
                     if (skill + learnFactor > maxCanLearn)
@@ -175,13 +173,12 @@ namespace Rimguistics
                         float maxLearn = (maxCanLearn - skill);
                         learnFactor = maxLearn;
                     }
-
                 }
-
                 LangUtils.AlterLanguageSkill(learner, chosenLanguage, learnFactor);
             }
 
-            //TODO: Make the learn factor so smart people won't lose langs more quickly
+            //TODO: Make the learn factor so smart people won't lose langs more quickly as well as learn faster
+
             //Deteriorate each language not used
             foreach (var lang in langComp.Languages)
             {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using Verse;
+using LudeonTK;
 
 namespace Rimguistics
 {
@@ -12,6 +13,7 @@ namespace Rimguistics
     public static class PawnBioPatch
     {
 
+        
         [HarmonyPostfix]
         public static void Postfix(Rect rect, Pawn pawn)
         {
@@ -39,9 +41,11 @@ namespace Rimguistics
                 height: languagePanelHeight
             );
 
-            PawnBioUI.DrawLanguageSkills(languageRect, pawn);
+            if(Widgets.ButtonText(languageRect, "ThisButton"))
+            {
 
-            
+                Find.WindowStack.Add(new LanguageDialog_Window{ CachedComp = comp });
+            }
             // If you want to shift the rest of the vanilla UI down (so traits are below languages),
             // you'd do something more advanced: e.g., adjusting the "curY" reflection in the method.
             // But a minimal approach is just to paint over the standard location (which might overlap).

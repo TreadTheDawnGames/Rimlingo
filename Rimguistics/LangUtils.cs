@@ -100,9 +100,15 @@ namespace Rimguistics
         /// <param name="pawn"></param>
         /// <param name="debug"></param>
         /// <returns></returns>
-        public static float GetPawnLearningFactor(Pawn pawn, bool debug = false)
+        public static float GetPawnLearningFactor(Pawn pawn)
         {
-            
+
+            bool debug = RimguisticsMod.Settings.useDebugValues;
+            if(pawn == null)
+            {
+                Log.Error($"[Rimguistics] Unable to get learning factor: Pawn was null.");
+                return 0f;
+            }
 
             //MaybeRebalance: Balance language learning so it's not done overnight. Need a formula... maybe something like LanguageSkill += Intelligence/20 min 1.
             
@@ -165,8 +171,11 @@ namespace Rimguistics
             }
             //This should return the language they both have the highest score in, not necessarily the first or default. Doing so will mean pawns will have default langs not based on the ones they know the best.
             
-            //TODO: Return language with highest score combined(!?). This will determine which language is best known between both pawns.
+            //TODO: Return language with highest skill combined(!?). This will determine which language is best known between both pawns.
             //      if pawn A has common 100 and french 10 and pawn B has common 0 and french 100, the scores are common 100 and french 110, so french is the chosen language.
+            //      if pawn A has common 50 and french 10 and pawn B has common 10 and french 50, the scores are common 60 and french 60, so one is chosen at random. (Unless there is a preferred language (not implemented yet), in which case that language is used.)
+            
+            //      Languages could have a preference score equal to skill + preferenceScore (+10, +5, +0, -5, or -10). Instead of comparing raw skill, compare preference score.
             
             var nonCommon = mutual.FirstOrDefault(l => l != "Common");
             if (!string.IsNullOrEmpty(nonCommon))

@@ -19,90 +19,114 @@ public static class PawnSpawnPatch
     [HarmonyPostfix]
     public static void Postfix(Pawn __instance, bool respawningAfterLoad)
     {
+        //only do this setup on initial game start.
+        if (respawningAfterLoad)
+            return;
+
         // Check if the pawn is humanlike
         if (__instance.RaceProps.Humanlike)
-        {
-            Log.Message($"[Rimguistics] Humanlike: \"{__instance.LabelShort}\" is spawned");
+        {   //debug
+            //Log.Message($"[Rimguistics] Humanlike: \"{__instance.LabelShort}\" is spawned");
+            
+            //give pawn a langComp
+            TryAddLangComp(__instance);
 
-            if (__instance.TryGetComp<Pawn_LangComp>() == null)
-            {
-                Log.Message($"[Rimguistics] {__instance.LabelShort} is getting a LangComp");
-
-                // Force-add the comp
-                var comp = new Pawn_LangComp();
-                comp.parent = __instance;
-                __instance.AllComps.Add(comp);
-            }
-
+            //skill adding langs if wild man.
             if (__instance.IsWildMan())
             {
+                //debug
                 Log.Message("[Rimguistics] Not adding languages to wild man " + __instance.LabelShort);
                 return;
             }
 
             var langComp = __instance.AllComps.OfType<Pawn_LangComp>().FirstOrDefault();
-            if (!langComp.Languages.Any())
+            if (langComp != null && !langComp.Languages.Any())
             {
                 try
                 {
+                    //setup additional lang count.
                     int iPass = (int)__instance.skills.GetSkill(SkillDefOf.Intellectual).passion;
                     int sPass = (int)__instance.skills.GetSkill(SkillDefOf.Social).passion;
-                    int maxAditionalLangs = 1 + iPass + sPass;
-                    langComp.SetMaxLangs(maxAditionalLangs + 1);
+                    int maxAdditionalLangs = 1 + iPass + sPass;
+                    langComp.SetMaxLangs(maxAdditionalLangs + 1);
+                    int additionalLangs = RimguisticsMod.Settings.useDebugValues ? maxAdditionalLangs : Rand.Range(0, maxAdditionalLangs);
 
-                    int additionalLangs = maxAditionalLangs;// Rand.Range(0, maxAditionalLangs);
+                    float intSkill = __instance.skills.GetSkill(SkillDefOf.Intellectual).Level;
+                    float socSkill = __instance.skills.GetSkill(SkillDefOf.Social).Level;
+
+
+                    //debug show how many langs are being learned.
                     string useS = additionalLangs >= 0 ? "s" : "";
                     Log.Message($"[Rimguistics] {__instance.LabelShort} is learning {additionalLangs + 1} language{useS}...");
-                    
+
+                    //add native language with score 500.
                     string nativeLang = LangUtils.AllLangs?.Where(l => __instance.Faction == l.BelongingFaction)?.FirstOrDefault()?.LangName ?? "Common";
                     langComp.SetLanguageSkill(nativeLang, 500f);
 
+                    if (Rand.Bool)
+                    {
+                        if (!LangUtils.PawnKnowsLanguage(__instance, "Common"))
+                        {
+                            additionalLangs -= 1;
+                            langComp.SetLanguageSkill("Common", DetermineStartingKnowledge(intSkill, socSkill));
+                        }
+                    }
 
-
+                    //setup additional langs
                     for (int i = additionalLangs; i > 0; i--)
                     {
-
+                        //get list of known langs.
                         List<string> knownLangs = new List<string>();
                         foreach (var availableLang in langComp.Languages.Values)
                         {
                             knownLangs.Add(availableLang.LangName);
                         }
 
-                        langComp.ListKnownLangs();
+                        //debug 
+                        //langComp.ListKnownLangs();
 
-                        List<string> availableLangs = new List<string>();
-                        foreach(var availableLang in LangUtils.AllLangs)
+                        //get list for allLangs
+                        List<string> unlearnedLangs = new List<string>();
+                        foreach (var availableLang in LangUtils.AllLangs)
                         {
-                            availableLangs.Add(availableLang.LangName);
+                            unlearnedLangs.Add(availableLang.LangName);
                         }
 
-                        availableLangs = availableLangs.Except(knownLangs).ToList();
+                        //filter all langs to only the langs pawn doesn't know.
+                        unlearnedLangs = unlearnedLangs.Except(knownLangs).ToList();
 
-                            //Except( knownLangs ).ToList();
-
-                        Log.Message("available langs".Colorize(Color.magenta));
+                        //debug
+                        /*Log.Message("available langs".Colorize(Color.magenta));
                         foreach (var thing in availableLangs)
                         {
                             Log.Message($"- {thing.ToString()}".Colorize(Color.magenta));
-                        }
-                        int languageCount = availableLangs.Count - 1;
-                        languageCount = languageCount < 0 ? 0 : languageCount;
+                        }*/
+                        
+                        //ensure index out of range doesn't occur when picking random language
+                        int unlearnedLangCount = unlearnedLangs.Count - 1;
+                        unlearnedLangCount = unlearnedLangCount < 0 ? 0 : unlearnedLangCount;
 
-                        string learningLang = availableLangs[Rand.Range(0, languageCount)];
+                        //pick random language from the list of non-learned langs
+                        string learningLang = unlearnedLangs[Rand.Range(0, unlearnedLangCount)];
 
+                        //if the language has already been learned, skill setting it up (should never happen)
                         if (knownLangs.Where(kl => kl == learningLang).Any())
                         {
                             Log.Error($"[Rimguistics] {learningLang} has already been chosen");
                             continue;
                         }
-                        langComp.SetLanguageSkill(learningLang, DetermineStartingKnowledge(__instance.skills.GetSkill(SkillDefOf.Intellectual).Level, __instance.skills.GetSkill(SkillDefOf.Social).Level));
+
+                        //finally, set the skill based on int and social.
+                        langComp.SetLanguageSkill(learningLang, DetermineStartingKnowledge(intSkill, socSkill));
                     }
 
+                    //if no languages were added, log an error. Languages should've been added.
                     if (!langComp.Languages.Values.Any()) Log.Error("[Rimguistics] No langs were assigned to " + __instance.LabelShort);
 
+                    //debug
                     if (additionalLangs == 0) Log.Message($"[Rimguistics] No additional langs were assigned to {__instance.LabelShort}".Colorize(Color.green));
+                    //Log.Message("-------");
 
-                    Log.Message("-------");
 
                     // comp.SetLanguageSkill("Common", 1f); // Default to "Common" with a skill level of 1
                 }
@@ -112,6 +136,32 @@ public static class PawnSpawnPatch
                     Log.Error($"[Rimguistics] Unable to assign languages to {__instance.LabelShort}: " + ex.Message);
                 }
             }
+            else
+            {
+                Log.Error($"[Rimguistics] {__instance.LabelShort}'s LangComp was either null or already had languages:\n LangComp: {langComp.ToString()}"+(langComp!=null?$"\n Language count: {langComp.Languages.Any()})" : ""));
+            }
+        }
+    }
+
+    private static void TryAddLangComp(Pawn __instance)
+    {
+        try
+        {
+            //if the langComp doesn't exist, add it.
+            if (__instance.TryGetComp<Pawn_LangComp>() == null)
+            {
+                //debug
+                Log.Message($"[Rimguistics] {__instance.LabelShort} is getting a LangComp");
+
+                // Force-add the comp
+                var comp = new Pawn_LangComp();
+                comp.parent = __instance;
+                __instance.AllComps.Add(comp);
+            }
+        }
+        catch (Exception e)
+        {
+            Log.Error("[Rimguistics] Unable to give " + __instance.LabelShort + " a LangComp: " + e.Message);
         }
     }
 

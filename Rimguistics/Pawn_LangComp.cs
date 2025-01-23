@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,29 @@ namespace Rimguistics
         public float GetLanguageSkill(string languageDefName)
         {
             return Languages.TryGetValue(languageDefName, out LangDef lang) ? lang.Skill : 0f;
+        }
+
+        public void SetPreferredLanguage(string preferredLanguage)
+        {
+            if(!Languages.Any())
+            {
+                Log.Error($"[Rimguistics] Unable to set {preferredLanguage} as {parent.LabelShort}'s preferred language: No known languages.");
+                return;
+            }
+            try
+            {
+                foreach (var lang in Languages)
+                {
+                    lang.Value.PreferredLanguage = false;
+                }
+                if( preferredLanguage != null )
+                    Languages[preferredLanguage].PreferredLanguage = true;
+            }
+            catch (Exception e)
+            {
+                Log.Error($"[Rimguistics] Unable to set {preferredLanguage} as {parent.LabelShort}'s preferred language: " + e.Message);
+
+            }
         }
 
         public bool SetLanguageSkill(string langName, float value)

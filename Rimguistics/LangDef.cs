@@ -20,6 +20,8 @@ namespace Rimguistics
         
         public FluencyState Fluency;
 
+        public bool PreferredLanguage = false;
+
         public LangDef(string langName, Faction belongingFaction, float skill, FluencyState fluency)
         {
             Skill = skill;
