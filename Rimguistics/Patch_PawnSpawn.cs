@@ -9,7 +9,7 @@ using Verse;
 using static Unity.Burst.Intrinsics.X86.Avx;
 
 [HarmonyPatch(typeof(Pawn), "SpawnSetup")]
-public static class PawnSpawnPatch
+public static class Patch_PawnSpawn
 {
     /// <summary>
     /// Adds a language component to <paramref name="__instance"/> and assigns starting languages.
@@ -127,8 +127,7 @@ public static class PawnSpawnPatch
                     if (additionalLangs == 0) Log.Message($"[Rimguistics] No additional langs were assigned to {__instance.LabelShort}".Colorize(Color.green));
                     //Log.Message("-------");
 
-
-                    // comp.SetLanguageSkill("Common", 1f); // Default to "Common" with a skill level of 1
+                    if (__instance.Faction != Find.FactionManager.OfPlayer) langComp.SetPreferredLanguage(nativeLang);
                 }
 
                 catch (Exception ex)

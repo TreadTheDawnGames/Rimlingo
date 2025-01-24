@@ -18,9 +18,16 @@ namespace Rimguistics
                 Log.Warning($"[Rimguistics] No language component found to render language window.");
                 return;
             }
-            if (standard.ButtonTextLabeled($"Languages ({comp.Languages.Count}/{comp.MaxLangs}):", "Reset Preferred"))
+            if (comp.parent.Faction == Find.FactionManager.OfPlayer)
             {
-                comp.SetPreferredLanguage(null);
+                if (standard.ButtonTextLabeled($"Languages ({comp.Languages.Count}/{comp.MaxLangs}):", "Reset Preferred"))
+                {
+                    comp.SetPreferredLanguage(null);
+                }
+            }
+            else
+            {
+                standard.Label($"Languages ({comp.Languages.Count}/{comp.MaxLangs}):");
             }
             standard.Gap();
             // Draw each language skill
@@ -33,10 +40,16 @@ namespace Rimguistics
                 }
                 var knowledgeColor = kvp.Value.PreferredLanguage ? Color.green : GetColorForLearnState(kvp.Value.Skill);
 
-
-                if (standard.ButtonTextLabeled(info.Colorize(knowledgeColor), "Set as Preferred"))
+                if (comp.parent.Faction == Find.FactionManager.OfPlayer)
                 {
-                    comp.SetPreferredLanguage(kvp.Value.LangName);
+                    if (standard.ButtonTextLabeled(info.Colorize(knowledgeColor), "Set as Preferred"))
+                    {
+                        comp.SetPreferredLanguage(kvp.Value.LangName);
+                    }
+                }
+                else
+                {
+                    standard.Label(info.Colorize(knowledgeColor));
                 }
                 //reset color
                 GUI.color = Color.white;

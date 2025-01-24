@@ -10,7 +10,7 @@ using LudeonTK;
 namespace Rimguistics
 {
     [HarmonyPatch(typeof(CharacterCardUtility), "DrawCharacterCard")]
-    public static class PawnBioPatch
+    public static class Patch_PawnBio
     {
 
         

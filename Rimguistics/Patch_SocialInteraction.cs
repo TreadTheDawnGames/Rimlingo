@@ -12,7 +12,7 @@ using System.Diagnostics.Eventing.Reader;
 namespace Rimguistics
 {
     [HarmonyPatch(typeof(Pawn_InteractionsTracker), "TryInteractWith")]
-    public static class SocialInteractionPatch
+    public static class Patch_SocialInteraction
     {
         [HarmonyPrefix]
         public static bool Prefix(Pawn_InteractionsTracker __instance, Pawn recipient, ref bool __result)

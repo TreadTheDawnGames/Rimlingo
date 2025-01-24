@@ -50,7 +50,9 @@ namespace Rimguistics
 
         public override void DoWindowContents(Rect inRect)
         {
+            //TODO: if tab is not pawn bio close
 
+            
             if (!Find.Selector.SelectedPawns.Any())
             {
                 Close(); 

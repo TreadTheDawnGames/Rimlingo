@@ -132,24 +132,24 @@ namespace Rimguistics
         }
 
         /// <summary>
-        /// Determines the best mutual language between <paramref name="initiator"/> and <paramref name="recipient"/>, prioritizing non-common languages.
+        /// Determines the best mutual language between <paramref name="initiator"/> and <paramref name="recipient"/>.
         /// </summary>
         /// <param name="initiator"></param>
         /// <param name="recipient"></param>
         /// <returns></returns>
         public static string GetBestLanguageName(Pawn initiator, Pawn recipient)
         {
-            var compA = GetPawnLangComp(initiator);
-            var compB = GetPawnLangComp(recipient);
-            if (compA == null || compB == null)
+            var initiatorComp = GetPawnLangComp(initiator);
+            var recipientComp = GetPawnLangComp(recipient);
+            if (initiatorComp == null || recipientComp == null)
             {
-                string debugA = compA == null ? "null" : compA.ToString();
-                string debugB = compB == null ? "null" : compB.ToString();
+                string debugA = initiatorComp == null ? "null" : initiatorComp.ToString();
+                string debugB = recipientComp == null ? "null" : recipientComp.ToString();
                 Log.Error($"[Rimguistics] {initiator.LabelShort}'s language component was {debugA} and {recipient.LabelShort}'s was {debugB}.");
                 return null;
             }
-            var languagesA = compA.Languages.Where(kv => kv.Value.Skill >=0f).Select(kv => kv.Key).ToList();
-            var languagesB = compB.Languages.Where(kv => kv.Value.Skill >=0f).Select(kv => kv.Key).ToList();
+            var initiatorLangs = initiatorComp.Languages;
+            var recipientLangs = recipientComp.Languages;
 
            /* Debug list for pawn languages
             * Log.Message("Langs A");
@@ -163,8 +163,22 @@ namespace Rimguistics
                 Log.Message(language);
             }*/
 
-            var mutual = languagesA.Intersect(languagesB).ToList();
-            if (!mutual.Any())
+            List<LangDef> mutualLangs = new List<LangDef>();
+
+            foreach(string langName in initiatorLangs.Keys)
+            {
+                if(recipientLangs.ContainsKey(langName))
+                {
+                    float initiatorSkillInLang = initiatorLangs[langName].Skill + (initiatorLangs[langName].PreferredLanguage ? 50f : 0f);
+                    float recipientSkillInLang = recipientLangs[langName].Skill + (recipientLangs[langName].PreferredLanguage ? 50f : 0f);
+                    mutualLangs.Add(new LangDef(langName, initiatorSkillInLang + recipientSkillInLang));
+                }
+            }
+
+
+
+
+            if (!mutualLangs.Any())
             {
                 Log.Message($"[Rimguistics] {initiator.LabelShort} and {recipient.LabelShort} share no languages!".Colorize(Color.green));
                 return null;
@@ -177,16 +191,16 @@ namespace Rimguistics
             
             //      Languages could have a preference score equal to skill + preferenceScore (+10, +5, +0, -5, or -10). Instead of comparing raw skill, compare preference score.
             
-            var nonCommon = mutual.FirstOrDefault(l => l != "Common");
-            if (!string.IsNullOrEmpty(nonCommon))
+            var nonCommon = mutualLangs.MaxBy(l => l.Skill);
+            if (!string.IsNullOrEmpty(nonCommon.LangName))
             {
-                Log.Message($"[Rimguistics] \"{nonCommon}\" is the best language to use.");
-                return nonCommon;
+                Log.Message($"[Rimguistics] \"{nonCommon.LangName}\" is the best language to use: {nonCommon.Skill}");
+                return nonCommon.LangName;
             }
 
-            if (mutual.Contains("Common"))
+            if (mutualLangs.Where(l => l.LangName == "Common").Any())
             {
-                Log.Message($"[Rimguistics] \"Common\" is the best language to use.");
+                Log.Message($"[Rimguistics] \"Common\" is the best language to use: {mutualLangs.Where(l => l.LangName == "Common").First().Skill}");
 
                 return "Common";
             }
