@@ -15,6 +15,8 @@ namespace Rimguistics
         
         public static List<LangDef> AllLangs = new List<LangDef> { };
 
+        private const float PREFERRED_LANGUAGE_SCORE = 100f;
+
         public LangUtils(Game game)
         {
             AllLangs = new List<LangDef>();
@@ -163,41 +165,36 @@ namespace Rimguistics
                 Log.Message(language);
             }*/
 
+
+            //assemble a list of mutual languages and a sum of the skill scores
             List<LangDef> mutualLangs = new List<LangDef>();
 
             foreach(string langName in initiatorLangs.Keys)
             {
                 if(recipientLangs.ContainsKey(langName))
                 {
-                    float initiatorSkillInLang = initiatorLangs[langName].Skill + (initiatorLangs[langName].PreferredLanguage ? 50f : 0f);
-                    float recipientSkillInLang = recipientLangs[langName].Skill + (recipientLangs[langName].PreferredLanguage ? 50f : 0f);
+                    float initiatorSkillInLang = initiatorLangs[langName].Skill + (initiatorLangs[langName].PreferredLanguage ? PREFERRED_LANGUAGE_SCORE : 0f);
+                    float recipientSkillInLang = recipientLangs[langName].Skill + (recipientLangs[langName].PreferredLanguage ? PREFERRED_LANGUAGE_SCORE : 0f);
                     mutualLangs.Add(new LangDef(langName, initiatorSkillInLang + recipientSkillInLang));
                 }
             }
 
-
-
-
+            //if there are no additional languages, return null
             if (!mutualLangs.Any())
             {
                 Log.Message($"[Rimguistics] {initiator.LabelShort} and {recipient.LabelShort} share no languages!".Colorize(Color.green));
                 return null;
             }
-            //This should return the language they both have the highest score in, not necessarily the first or default. Doing so will mean pawns will have default langs not based on the ones they know the best.
             
-            //TODO: Return language with highest skill combined(!?). This will determine which language is best known between both pawns.
-            //      if pawn A has common 100 and french 10 and pawn B has common 0 and french 100, the scores are common 100 and french 110, so french is the chosen language.
-            //      if pawn A has common 50 and french 10 and pawn B has common 10 and french 50, the scores are common 60 and french 60, so one is chosen at random. (Unless there is a preferred language (not implemented yet), in which case that language is used.)
-            
-            //      Languages could have a preference score equal to skill + preferenceScore (+10, +5, +0, -5, or -10). Instead of comparing raw skill, compare preference score.
-            
-            var nonCommon = mutualLangs.MaxBy(l => l.Skill);
-            if (!string.IsNullOrEmpty(nonCommon.LangName))
+            //return the best language by score
+            var bestLang = mutualLangs.MaxBy(l => l.Skill);
+            if (!string.IsNullOrEmpty(bestLang.LangName))
             {
-                Log.Message($"[Rimguistics] \"{nonCommon.LangName}\" is the best language to use: {nonCommon.Skill}");
-                return nonCommon.LangName;
+                Log.Message($"[Rimguistics] \"{bestLang.LangName}\" is the best language to use: {bestLang.Skill}");
+                return bestLang.LangName;
             }
 
+            //fallback on Common
             if (mutualLangs.Where(l => l.LangName == "Common").Any())
             {
                 Log.Message($"[Rimguistics] \"Common\" is the best language to use: {mutualLangs.Where(l => l.LangName == "Common").First().Skill}");
@@ -205,6 +202,7 @@ namespace Rimguistics
                 return "Common";
             }
 
+            //otherwise it's null
             return null;
         }
 

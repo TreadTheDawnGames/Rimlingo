@@ -9,6 +9,8 @@ using UnityEngine;
 using Verse;
 using Verse.Noise;
 using LudeonTK;
+using RimWorld.Planet;
+using static Unity.Burst.Intrinsics.X86.Avx;
 
 namespace Rimguistics
 {
@@ -17,56 +19,121 @@ namespace Rimguistics
         bool chosen = false;
         public Pawn_LangComp CachedComp;
 
-        public LanguageDialog_Window()
+        [TweakValue("heightAdditional", 0f,200f)]
+        static float heightAdditional = 110;
+
+        [TweakValue("heightPerLang", 0f,75f)]
+        static float heightPerLang = 34;
+        [TweakValue("heightPerLangPlayer", 0f,75f)]
+        static float heightPerLangPlayer = 42;
+        
+        [TweakValue("isFactionAdditional", 0f,400f)]
+        static float isFactionAdditional = 250;
+        
+        [TweakValue("isNotFactionAdditional", 0f,150f)]
+        static float isNotFactionAdditional = 70f;
+        
+        static float WindowXPos = 539;
+        static float WindowYPos = 740;
+
+        private static LanguageDialog_Window instance;
+
+        public LanguageDialog_Window(Pawn_LangComp comp)
         {
             absorbInputAroundWindow = false;
             preventCameraMotion = false;
             doCloseX = true;
+            instance = this;
+            CachedComp = comp;
+        }
+        
+        public static void CloseWindowInstance()
+        {
+            if (instance != null)
+                instance.Close();
+            else
+                Log.Error("[Rimguistics] Unable to close Language Window: Instance was null.");
         }
 
-        [TweakValue("LangWindow Height Additional")]
-        static float heightAdditional = 100;
-        [TweakValue("LangWindow Height PerLang")]
-        static float heightPerLang = 45;
-        [TweakValue("Additional Width", 0, 1440)]
-        static float additionalWidth= 300;
-        
-        [TweakValue("LangWindow X Position", 0, 2560)]
-        static float WindowXPos= 513;
-        [TweakValue("LangWindow Y Position", 0, 1440)]
-        static float WindowYPos= 650;
-        
         protected override void SetInitialSizeAndPosition()
         {
+            Text.Font = GameFont.Medium;
 
-            string longestName = CachedComp.Languages?.MaxBy(l => l.Key.Length).Key ?? "";
+            if (CachedComp == null)
+            {
+                Log.Warning("[Rimguistics] Unable to open LanguageDialog_Window: CachedComp is null.");
+                Close();
+                return;
+            }
 
-            float height = (heightPerLang * CachedComp.MaxLangs) + heightAdditional;
-            Rect viewRect = new Rect(WindowXPos, UI.screenHeight - WindowYPos, Text.CalcSize(longestName).x + additionalWidth, height);
+            string longestLangName = CachedComp.Languages?.Keys.MaxBy(l => l.Length) ?? "";
+            string label = CachedComp.parent.Label;
 
-            windowRect = viewRect;
-            windowRect = windowRect.Rounded();
+            float langTextWidth = Text.CalcSize($"{longestLangName}: {Math.Min(CachedComp.Languages[longestLangName].Skill, 100f):F1}").x;
+            float labelTextWidth = Text.CalcSize(CachedComp.parent.Label).x;
+            float languagesCountWidth = Text.CalcSize($"Languages ({CachedComp.Languages.Count}/{CachedComp.MaxLangs}):").x;
+
+            float textWidth = Math.Max(Math.Max(langTextWidth, labelTextWidth), languagesCountWidth);
+
+            Log.Message($"{longestLangName}: {langTextWidth}, {label}: {labelTextWidth}, {$"Languages ({CachedComp.Languages.Count}/{CachedComp.MaxLangs}):"}: {languagesCountWidth}, text width: {textWidth}") ;
+
+            float height = ((CachedComp.parent.Faction.IsPlayer ? heightPerLangPlayer : heightPerLang) * CachedComp.MaxLangs) + heightAdditional;
+            Rect viewRect = new Rect(WindowXPos, UI.screenHeight - WindowYPos, textWidth + (CachedComp.parent.Faction.IsPlayer ? isFactionAdditional : isNotFactionAdditional), height);
+            windowRect = viewRect.Rounded();
+
         }
 
         public override void DoWindowContents(Rect inRect)
         {
-            //TODO: if tab is not pawn bio close
-
-            
+            //if there is no selected pawn, close the window
             if (!Find.Selector.SelectedPawns.Any())
             {
                 Close(); 
                 return;
             }
-            var comp = LangUtils.GetPawnLangComp(Find.Selector.SelectedPawns.First());
 
+            //get info for the selected pawn
+            var selectedPawn = Find.Selector.SelectedPawns.First();
+
+            //if pawn is an animal, close.
+            if (selectedPawn.AnimalOrWildMan() && !selectedPawn.IsWildMan())
+            {
+                Close();
+                return;
+            }
+            var comp = LangUtils.GetPawnLangComp(selectedPawn);
+            
+            
+            var tabs = selectedPawn.GetInspectTabs();
+
+            //check to make sure the social tab is open, and if it's not, close the language window.
+            foreach (var tab in tabs)
+            {
+                if (tab is ITab_Pawn_Social)
+                {
+                    if (!InspectPaneUtility.IsOpen(tab, (MainTabWindow_Inspect)MainButtonDefOf.Inspect.TabWindow))
+                    {
+                        Close();
+                        return;
+                    }
+                }
+            }
+
+            //if the inspect window isn't open, close the window.
+            if (!MainButtonDefOf.Inspect.TabWindow.IsOpen)
+            {
+                Close();
+                return;
+            }
+
+            //cache the comp
             if (comp != CachedComp)
             {
                 CachedComp = comp;
                 SetInitialSizeAndPosition();
             }
 
-
+            //place the language window items
             float height = (200 * CachedComp.MaxLangs) + 10;
             Rect viewRect = new Rect(0f, 0f, inRect.width - 16f, height);
             Listing_Standard listingStandard = new Listing_Standard();
@@ -74,17 +141,13 @@ namespace Rimguistics
             listingStandard.Begin(viewRect);
             
             listingStandard.Label(CachedComp.parent.Label);
-//            optionalTitle = CachedComp.parent.Label;
             
             listingStandard.Gap();
 
-
             if(CachedComp != null && CachedComp.Languages.Any())
             {
-
                 PawnBioUI.DrawLanguageSkills(listingStandard, CachedComp);
             }
-
 
             listingStandard.End();
         }

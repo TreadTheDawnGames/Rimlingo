@@ -1,6 +1,7 @@
 using UnityEngine;
 using Verse;
 using System;
+using System.Linq;
 
 namespace Rimguistics
 {
@@ -18,7 +19,7 @@ namespace Rimguistics
                 Log.Warning($"[Rimguistics] No language component found to render language window.");
                 return;
             }
-            if (comp.parent.Faction == Find.FactionManager.OfPlayer)
+            if (comp.parent.Faction.IsPlayer)
             {
                 if (standard.ButtonTextLabeled($"Languages ({comp.Languages.Count}/{comp.MaxLangs}):", "Reset Preferred"))
                 {
@@ -29,9 +30,12 @@ namespace Rimguistics
             {
                 standard.Label($"Languages ({comp.Languages.Count}/{comp.MaxLangs}):");
             }
+
             standard.Gap();
+
             // Draw each language skill
-            foreach (var kvp in comp.Languages)
+            int langCount = 0;
+            foreach (var kvp in comp.Languages.OrderBy(kvp => kvp.Value.Skill).Reverse())
             {
                 string info = $"{kvp.Key}: {Math.Min(kvp.Value.Skill, 100f):F1}";
                 if (RimguisticsMod.Settings.showFullLangKnowledge)
@@ -54,6 +58,14 @@ namespace Rimguistics
                 //reset color
                 GUI.color = Color.white;
                 standard.Gap();
+                langCount++;
+            }
+
+            while (langCount < comp.MaxLangs)
+            {
+                standard.Label("- - - - -".Colorize(new Color(0.2f, 0.2f, 0.2f)));
+                standard.Gap();
+                langCount++;
             }
         }
 
