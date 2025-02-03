@@ -7,13 +7,13 @@
   </supportedVersions>
   <packageId>CoolNether123.Rimlingo</packageId>
   <description>
-    Rimlingo introduces a dynamic language system to RimWorld. Pawns can speak one to three languages: their native tongue and up to two additional foreign languages, with Common being the most prevalent.
+    Rimlingo introduces a dynamic language system to RimWorld. Pawns speak their own faction's language and up to five others depending on their social and intelligence passions, with Common being the most prevalent.
     
     Interactions across language barriers come with mood debuffs due to misunderstandings. However, interactions between factions in a shared non-common language provide mood buffs, fostering inter-faction relationships.
 
     When pawns interact without a common language, they can learn bits of the other pawn's language based on Intelligence, increasing their language score (LS). Over time, pawns may learn additional languages beyond their initial set.
   </description>
-  <url>https://github.com/CoolNether123/Rimlingo</url>
+  <url>https://github.com/TreadTheDawnGames/Rimguistics</url>
 
   <modDependencies>
     <li>
